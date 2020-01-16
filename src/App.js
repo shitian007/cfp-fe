@@ -1,9 +1,9 @@
 import React from 'react';
-import './App.css';
 import SearchAppBar from './components/SearchAppBar';
 import Person from './components/Person'
 import Conference from './components/Conference'
 import Organization from './components/Organization'
+import './App.css';
 
 export default App;
 
@@ -29,21 +29,27 @@ class Base extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      display: ''
+      displayType: ''
     }
   }
 
   displayInfo = () => {
-    if (this.state.display == 'Person') {
+    if (this.state.displayType === 'Person') {
       return <Person />
-    } else if (this.state.display == 'Organization') {
+    } else if (this.state.displayType === 'Organization') {
       return <Organization />
-    } else if (this.state.display == 'Conference') {
+    } else if (this.state.displayType === 'Conference') {
       return <Conference />
     } else {
       return <Home />
     }
   };
+
+  changeDisplayType = (displayType) => {
+    this.setState({
+      display: displayType
+    });
+  }
 
 
   render() {
