@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { IP } from './constants'
 import Typography from '@material-ui/core/Typography';
+import { Grid } from '@material-ui/core';
 
 const styles = theme => ({
   title: {
@@ -16,6 +17,9 @@ const styles = theme => ({
   search: {
     width: 500,
     margin: 10,
+  },
+  optionType: {
+    float: 'right'
   }
 });
 
@@ -57,7 +61,7 @@ class SearchAppBar extends React.Component {
         </div>
         <Autocomplete
           getOptionLabel={option => {
-            return option[1];
+            return option.text;
           }}
           filterOptions={x => x}
           options={this.state.searchResults}
@@ -76,9 +80,14 @@ class SearchAppBar extends React.Component {
           )}
           renderOption={option => {
             return (
-              <Typography variant="body2" color="textSecondary">
-                {option[1]}
-              </Typography>
+              <Grid container justify="space-between">
+                <Typography variant="body2" align="left">{option.text}</Typography>
+                <Typography variant="body2" color="textSecondary" align="right">{option.type}</Typography>
+              </Grid>
+              // <TextField>
+              //   {option.text}
+              //   <p className={classes.optionType}>{option.type}</p>
+              // </TextField>
             );
           }}
         />
