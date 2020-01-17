@@ -31,6 +31,7 @@ class Base extends React.Component {
     this.state = {
       displayType: ''
     }
+    this.search = this.search.bind(this);
   }
 
   displayInfo = () => {
@@ -44,6 +45,9 @@ class Base extends React.Component {
       return <Home />
     }
   };
+  search = (searchVal) => {
+    console.log(searchVal);
+  }
 
   changeDisplayType = (displayType) => {
     this.setState({
@@ -51,12 +55,13 @@ class Base extends React.Component {
     });
   }
 
-
   render() {
     return (
-      <div>
-        <SearchAppBar />
-        {this.displayInfo()}
+      <div style={{ margin: 10 }}>
+        <SearchAppBar
+          search={this.search}
+         />
+        {this.state.display}
       </div>
     )
   }

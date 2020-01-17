@@ -13,9 +13,10 @@ const styles = theme => ({
   },
   grow: {
     backgroundColor: 'lightblue',
+    borderRadius: 10
   },
   search: {
-    width: 500,
+    width: 800,
     margin: 10,
   },
   optionType: {
@@ -30,14 +31,10 @@ class SearchAppBar extends React.Component {
       searchResults: [],
     };
     this.getSearchResults = debounce(this.getSearchResults, 300)
+    this.onTextChange = this.onTextChange.bind(this);
   }
 
-  updateResults = (e) => {
-    e.preventDefault();
-    let searchVal = e.target.value;
-    this.getSearchResults(searchVal);
-  }
-
+  // Debounced search results retrieval
   getSearchResults = (searchVal) => {
     let fetch_url = IP + 'search?search_val=' + searchVal;
     fetch(fetch_url, {
@@ -45,11 +42,17 @@ class SearchAppBar extends React.Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         this.setState({
           searchResults: responseJson['results']
         });
       });
+  }
+
+  onTextChange = (event, value) => {
+    this.setState({
+      searchVal: value
+    });
+    this.getSearchResults(value)
   }
 
   render() {
@@ -57,25 +60,30 @@ class SearchAppBar extends React.Component {
     return (
       <div className={classes.grow}>
         <div className={classes.title}>
-          Conference Information Search
+          Mining Call for Papers
         </div>
         <Autocomplete
-          getOptionLabel={option => {
-            return option.text;
-          }}
-          filterOptions={x => x}
+          onKeyPress={(e)=>  {
+            if (e.key == 'Enter') {
+              this.props.search(this.state.searchVal);
+            }
+          }
+        }
+          getOptionLabel={
+            (option) => {
+              return (typeof option === "String") ? option : option.text;
+            }
+          }
+          onInputChange={this.onTextChange}
           options={this.state.searchResults}
           autoComplete
-          includeInputInList
           freeSolo
-          disableOpenOnFocus
           renderInput={params => (
             <TextField
               className={classes.search}
               {...params}
               label="Search"
               variant="outlined"
-              onChange={this.updateResults}
             />
           )}
           renderOption={option => {
@@ -84,10 +92,6 @@ class SearchAppBar extends React.Component {
                 <Typography variant="body2" align="left">{option.text}</Typography>
                 <Typography variant="body2" color="textSecondary" align="right">{option.type}</Typography>
               </Grid>
-              // <TextField>
-              //   {option.text}
-              //   <p className={classes.optionType}>{option.type}</p>
-              // </TextField>
             );
           }}
         />
