@@ -36,7 +36,7 @@ class SearchAppBar extends React.Component {
 
   // Debounced search results retrieval
   getSearchResults = (searchVal) => {
-    let fetch_url = IP + 'search?search_val=' + searchVal;
+    let fetch_url = IP + 'autocomplete_search?search_val=' + searchVal;
     fetch(fetch_url, {
       method: 'GET',
     })
