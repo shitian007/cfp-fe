@@ -82,6 +82,22 @@ def autocomplete_search():
         'results': results
         }
 
+@app.route('/search')
+@cross_origin()
+def search():
+    search_val = request.args.get('search_val')
+    with sqlite3.connect(db_filepath) as cnx:
+        max_results = 10
+        cur = cnx.cursor()
+        person_orgs = Jsonifier.person_org(cur.execute(SearchQueries.person_org_search(search_val, max_results)).fetchall())
+        orgs = Jsonifier.id_name(cur.execute(SearchQueries.org_search(search_val, max_results)).fetchall(), 'org')
+        confs = Jsonifier.id_name(cur.execute(SearchQueries.conf_search(search_val, max_results)).fetchall(), 'conf')
+    return {
+        'persons': person_orgs,
+        'organizations': list(filter(lambda r: len(r['text']) < 300, orgs)),
+        'conferences': list(filter(lambda r: len(r['text']) < 300, confs))
+        }
+
 @app.route('/person')
 @cross_origin()
 def get_person():
@@ -107,7 +123,7 @@ def get_conf():
         'id': conf_id,
         'title': conf_title,
         'pages': conf_pages,
-        'persons': jsonify_conf_persons(conf_persons)
+        'persons': Jsonifier.conf_persons(conf_persons)
     }
 
 if __name__ == '__main__':
