@@ -6,23 +6,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-import { Divider, Grid, Link, Typography } from '@material-ui/core';
+import { Grid, Link, Typography } from '@material-ui/core';
 import { IP } from './constants'
-
-const styles = theme => ({
-  container: {
-    margin: 50
-  },
-
-  personTable: {
-    marginRight: 50
-  },
-
-  personTableHeader: {
-    background: 'lightgrey'
-  }
-});
 
 class Conference extends React.Component {
   constructor(props) {
@@ -52,57 +37,23 @@ class Conference extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
     return (
-      <div className={classes.container}>
+      <div style={{ margin: 50 }}>
         <Grid container spacing={3}>
           <Grid item xs>
             <Grid container spacing={1}>
               <Typography variant="h5" color="textPrimary">{this.state.title}</Typography>
             </Grid>
             <Grid container spacing={1}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow align="left">
-                    <Typography>
-                    Relevant URLs&nbsp;
-                    </Typography>
-                    </TableRow>
-                </TableHead>
-                <Divider variant="left" />
-                <TableBody>
-                  {this.state.pages.map(row => (
-                    <TableRow align='left'>
-                      <Link target="_blank" href={row[0]}>
-                        {row[0]}
-                      </Link>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <ConferenceInfo pages={this.state.pages} />
             </Grid>
           </Grid>
           <Grid item sm>
-            <TableContainer className={classes.personTable} component={Paper}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow className={classes.personTableHeader}>
-                    <TableCell align="right">Person&nbsp;</TableCell>
-                    <TableCell align="right">Organization&nbsp;</TableCell>
-                    <TableCell align="right">Role&nbsp;</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.state.persons.map(row => (
-                    <TableRow key={row.person_id}>
-                      <TableCell align="right">{row.name}</TableCell>
-                      <TableCell align="right">{row.org}</TableCell>
-                      <TableCell align="right">{row.role}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <ConferencePersons
+              persons={this.state.persons}
+              selectPerson={this.props.selectPerson}
+              selectOrganization={this.props.selectOrganization}
+            />
           </Grid>
         </Grid>
       </div>
@@ -110,4 +61,68 @@ class Conference extends React.Component {
   }
 }
 
-export default withStyles(styles)(Conference);
+class ConferencePersons extends React.Component {
+  render() {
+    return (
+      <TableContainer style={{ marginRight: 50 }} component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow style={{ background: 'lightgrey' }}>
+              <TableCell align="right">Person&nbsp;</TableCell>
+              <TableCell align="right">Organization&nbsp;</TableCell>
+              <TableCell align="right">Role&nbsp;</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.props.persons.map(row => (
+              <TableRow key={row.person_id}>
+                <TableCell align="right">
+                  <Link onClick={() => this.props.selectPerson(row.person_id)}>
+                    {row.name}
+                  </Link>
+                </TableCell>
+                <TableCell align="right">
+                  {/* <Link onClick={() => this.props.selectOrganization(row.org_id)}>
+                    {row.org}
+                  </Link> */}
+                  {row.org}
+                </TableCell>
+                <TableCell align="right">{row.role}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    )
+  }
+}
+
+class ConferenceInfo extends React.Component {
+  render() {
+    return (
+      <Table size="small">
+        <TableHead>
+          <TableRow align="left">
+            <TableCell>
+              <Typography>
+                Relevant URLs
+                    </Typography>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {this.props.pages.map(row => (
+            <TableRow key={row[0]}>
+              <TableCell>
+                <Link target="_blank" href={row[0]}>
+                  {row[0]}
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    )
+  }
+}
+export default Conference;
