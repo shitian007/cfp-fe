@@ -3,6 +3,8 @@ import SearchAppBar from './components/SearchAppBar';
 import Person from './components/Person'
 import Conference from './components/Conference'
 import Organization from './components/Organization'
+import Home from './components/home'
+import SearchPage from './components/searchPage'
 import { IP } from './components/constants'
 import './App.css';
 
@@ -14,14 +16,6 @@ function App() {
       <Base />
     </div>
   );
-}
-
-class Home extends React.Component {
-  render() {
-    return (
-      <div>HOME</div>
-    )
-  }
 }
 
 class Base extends React.Component {
@@ -50,9 +44,20 @@ class Base extends React.Component {
 
   getResults = (searchVal) => {
     let fetch_url = IP + 'search?search_val=' + searchVal;
-    this.setState({
-      display: <Home />
-    });
+    fetch(fetch_url, {
+      method: 'GET'
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({
+        display: <SearchPage
+          searchResults={responseJson.results}
+          selectPerson={this.selectPerson}
+          selectOrganization={this.selectOrganization}
+          selectConference={this.selectConference}
+         />
+      });
+    })
   }
 
   selectPerson = (person_id) => {
