@@ -53,7 +53,16 @@ def search():
 @cross_origin()
 def get_person():
     person_id = request.args.get('id')
-    return person_id
+    with sqlite3.connect(db_filepath) as cnx:
+        cur = cnx.cursor()
+        person_name = cur.execute(SearchQueries.person_name(person_id)).fetchone()
+        person_org = Jsonifier.id_name(cur.execute(SearchQueries.person_org(person_id)).fetchall(), 'org')
+        person_confs = Jsonifier.person_confs(cur.execute(SearchQueries.person_confs(person_id)).fetchall())
+    return {
+        'name': person_name[0],
+        'org': person_org[0] if person_org else "", # id_name processes for list 
+        'conferences': person_confs
+    }
 
 @app.route('/org')
 @cross_origin()
