@@ -18,7 +18,8 @@ class Jsonifier:
     @staticmethod
     def person_org(person_orgs):
         return [{
-            'person_id': po[0],
+            'type': 'person',
+            'id': po[0],
             'name': po[1],
             'org_id': po[2],
             'org': po[3],
@@ -89,14 +90,19 @@ def search():
     search_val = request.args.get('search_val')
     with sqlite3.connect(db_filepath) as cnx:
         max_results = 10
+        max_search_length = 300
         cur = cnx.cursor()
         person_orgs = Jsonifier.person_org(cur.execute(SearchQueries.person_org_search(search_val, max_results)).fetchall())
         orgs = Jsonifier.id_name(cur.execute(SearchQueries.org_search(search_val, max_results)).fetchall(), 'org')
         confs = Jsonifier.id_name(cur.execute(SearchQueries.conf_search(search_val, max_results)).fetchall(), 'conf')
+    # Filter and sort by length of each category
+    orgs = list(filter(lambda r: len(r['text']) < max_search_length, orgs))
+    confs = list(filter(lambda r: len(r['text']) < max_search_length, confs))
+    results = []
+    for res_list, _ in sorted(list(map(lambda l: (l, len(l)), [person_orgs, orgs, confs])), key=lambda t: t[1], reverse=True):
+        results += res_list
     return {
-        'persons': person_orgs,
-        'organizations': list(filter(lambda r: len(r['text']) < 300, orgs)),
-        'conferences': list(filter(lambda r: len(r['text']) < 300, confs))
+        'results': results
         }
 
 @app.route('/person')
