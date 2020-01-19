@@ -30,6 +30,7 @@ class Conference extends React.Component {
       .then((responseJson) => {
         this.setState({
           title: responseJson.title,
+          topics: responseJson.topics,
           pages: responseJson.pages,
           persons: responseJson.persons
         });
@@ -37,12 +38,23 @@ class Conference extends React.Component {
   }
 
   render() {
+    let topics = []
+    if (this.state.topics) {
+      this.state.topics.forEach((row, index) => {
+        topics.push(
+              <Typography key={row} variant="body2" color="textSecondary" align="right">{row}</Typography>
+        )
+      })
+    }
     return (
       <div style={{ margin: 50 }}>
         <Grid container spacing={3}>
           <Grid item xs>
             <Grid container spacing={1}>
               <Typography variant="h5" color="textPrimary">{this.state.title}</Typography>
+            </Grid>
+            <Grid style={{margin: 20, padding: 20}} container justify="space-between">
+              {topics}
             </Grid>
             <Grid container spacing={1}>
               <ConferenceInfo pages={this.state.pages} />
