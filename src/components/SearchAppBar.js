@@ -64,14 +64,14 @@ class SearchAppBar extends React.Component {
         </div>
         <Autocomplete
           onKeyPress={(e)=>  {
-            if (e.key == 'Enter') {
+            if (e.key === "Enter") {
               this.props.search(this.state.searchVal);
             }
           }
         }
           getOptionLabel={
             (option) => {
-              return (typeof option === "String") ? option : option.text;
+              return (typeof option === "string") ? option : option.text;
             }
           }
           onInputChange={this.onTextChange}
