@@ -65,7 +65,10 @@ class Base extends React.Component {
   selectOrganization = (org_id) => {
     this.setState({
       org_id: org_id,
-      display: <Organization id={org_id} />
+      display: <Organization
+        id={org_id}
+        selectPerson={this.selectPerson}
+      />
     });
   }
   selectConference = (conf_id) => {
