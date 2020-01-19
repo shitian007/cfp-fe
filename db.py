@@ -1,7 +1,7 @@
-from utils import SearchQueries, Jsonifier
 import sqlite3
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
+from utils import SearchQueries, Jsonifier
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -68,11 +68,13 @@ def get_conf():
     with sqlite3.connect(db_filepath) as cnx:
         cur = cnx.cursor()
         conf_title = cur.execute(SearchQueries.conf_title(conf_id)).fetchone()
+        conf_topics = cur.execute(SearchQueries.conf_topics(conf_id)).fetchone()
         conf_pages = cur.execute(SearchQueries.conf_pages(conf_id)).fetchall()
         conf_persons = cur.execute(SearchQueries.conf_persons(conf_id)).fetchall()
     return {
         'id': conf_id,
         'title': conf_title,
+        'topics': eval(conf_topics[0]),
         'pages': conf_pages,
         'persons': Jsonifier.conf_persons(conf_persons)
     }
