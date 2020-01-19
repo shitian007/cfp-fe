@@ -59,7 +59,14 @@ def get_person():
 @cross_origin()
 def get_org():
     org_id = request.args.get('id')
-    return org_id
+    with sqlite3.connect(db_filepath) as cnx:
+        cur = cnx.cursor()
+        org_name = cur.execute(SearchQueries.org_name(org_id)).fetchone()
+        org_persons = Jsonifier.id_name(cur.execute(SearchQueries.org_persons(org_id)).fetchall(), 'person')
+    return {
+        'name': org_name,
+        'persons': org_persons
+    }
 
 @app.route('/conf')
 @cross_origin()
