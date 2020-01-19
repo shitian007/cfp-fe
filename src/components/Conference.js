@@ -75,7 +75,7 @@ class ConferencePersons extends React.Component {
           </TableHead>
           <TableBody>
             {this.props.persons.map(row => (
-              <TableRow key={row.person_id}>
+              <TableRow key={row.id}>
                 <TableCell align="right">
                   <Link onClick={() => this.props.selectPerson(row.person_id)}>
                     {row.name}

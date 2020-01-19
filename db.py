@@ -27,7 +27,8 @@ class Jsonifier:
     @staticmethod
     def conf_persons(persons):
         return [{
-            'person_id': person[0],
+            'type': 'person',
+            'id': person[0],
             'name': person[1],
             'org_id': person[2],
             'org': person[3],
