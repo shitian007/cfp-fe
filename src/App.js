@@ -1,8 +1,8 @@
 import React from 'react';
-import SearchAppBar from './components/SearchAppBar';
-import Person from './components/Person'
-import Conference from './components/Conference'
-import Organization from './components/Organization'
+import SearchAppBar from './components/searchAppBar';
+import Person from './components/person'
+import Conference from './components/conference'
+import Organization from './components/organization'
 import Home from './components/home'
 import SearchPage from './components/searchPage'
 import { IP } from './components/constants'
