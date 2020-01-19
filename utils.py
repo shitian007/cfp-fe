@@ -43,6 +43,14 @@ class SearchQueries:
 
     conf_search = lambda search_val, num: "SELECT id, title FROM WikicfpConferences WHERE title LIKE \'%{}%\' GROUP BY title LIMIT {}".format(search_val, num)
 
+    # Organization Lookup
+    org_name = lambda org_id: "SELECT name FROM Organizations WHERE id={}".format(org_id)
+
+    org_persons = lambda org_id: "SELECT p.id, p.name\
+        FROM Persons p\
+        JOIN PersonOrganization po ON po.person_id=p.id\
+        JOIN Organizations o ON po.org_id=o.id WHERE o.id={} ORDER BY p.id;".format(org_id)
+
     # Conference Lookup
     conf_title = lambda conf_id: "SELECT title FROM WikicfpConferences WHERE id={}".format(conf_id)
 
