@@ -33,15 +33,15 @@ class Organization extends React.Component {
   }
   render() {
     return (
-      <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
+      <div style={{ margin: 30, display: 'flex', justifyContent: 'center' }}>
         <div>
           <Typography variant="h5" color="textPrimary">{this.state.name}</Typography>
         </div>
-        <Table style={{ width: 800 }} size="small">
+        <Table style={{ width: 500 }} size="small">
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="body2" color="textSecondary">Persons</Typography>
+                <Typography variant="body1" color="textSecondary">Persons</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
