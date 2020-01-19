@@ -26,11 +26,7 @@ class Base extends React.Component {
       person_id: 1,
       org_id: 1,
       conf_id: 1,
-      display: <Conference
-        id={1}
-        selectPerson={this.selectPerson}
-        selectOrganization={this.selectOrganization}
-      />
+      display: <Home />
     }
     this.search = this.search.bind(this);
     this.selectPerson = this.selectPerson.bind(this);
@@ -47,17 +43,17 @@ class Base extends React.Component {
     fetch(fetch_url, {
       method: 'GET'
     })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      this.setState({
-        display: <SearchPage
-          searchResults={responseJson.results}
-          selectPerson={this.selectPerson}
-          selectOrganization={this.selectOrganization}
-          selectConference={this.selectConference}
-         />
-      });
-    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          display: <SearchPage
+            searchResults={responseJson.results}
+            selectPerson={this.selectPerson}
+            selectOrganization={this.selectOrganization}
+            selectConference={this.selectConference}
+          />
+        });
+      })
   }
 
   selectPerson = (person_id) => {
@@ -94,7 +90,7 @@ class Base extends React.Component {
       <div style={{ margin: 10 }}>
         <SearchAppBar
           search={this.search}
-         />
+        />
         {this.state.display}
       </div>
     )
