@@ -87,17 +87,16 @@ class ConferencePersons extends React.Component {
           </TableHead>
           <TableBody>
             {this.props.persons.map(row => (
-              <TableRow key={row.id}>
+              <TableRow key={row.role + row.id}>
                 <TableCell align="right">
                   <Link onClick={() => this.props.selectPerson(row.id)}>
                     {row.name}
                   </Link>
                 </TableCell>
                 <TableCell align="right">
-                  {/* <Link onClick={() => this.props.selectOrganization(row.org_id)}>
+                  <Link onClick={() => this.props.selectOrganization(row.org_id)}>
                     {row.org}
-                  </Link> */}
-                  {row.org}
+                  </Link>
                 </TableCell>
                 <TableCell align="right">{row.role}</TableCell>
               </TableRow>
