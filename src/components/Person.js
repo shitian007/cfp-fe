@@ -56,7 +56,7 @@ class Organization extends React.Component {
           </TableHead>
           <TableBody>
             {this.state.confs.map((conf, index) => (
-              <TableRow key={conf.id}>
+              <TableRow key={conf.id + conf.role}>
                 <TableCell>
                   <Link onClick={() => this.props.selectConference(conf.id)}>
                     {conf.title}
