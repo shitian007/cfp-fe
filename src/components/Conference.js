@@ -6,12 +6,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Grid, Link, Typography } from '@material-ui/core';
-import { IP } from './constants'
+import { Grid, Typography } from '@material-ui/core';
+import { Link, withRouter } from 'react-router-dom';
+import { backendIP } from './constants'
 
 class Conference extends React.Component {
   constructor(props) {
     super(props);
+    this.mounted = false;
     this.state = {
       id: this.props.id,
       title: '',
@@ -21,19 +23,33 @@ class Conference extends React.Component {
     this.getConferenceInfo();
   }
 
+  componentDidMount() {
+    this.mounted = true;
+    this.unlisten = this.props.history.listen((location, action) => {
+      this.getConferenceInfo();
+    });
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+    this.unlisten();
+  }
+
   getConferenceInfo = () => {
-    let fetch_url = IP + 'conf?id=' + this.state.id;
+    let fetch_url = backendIP + 'conf?id=' + this.props.match.params.id;
     fetch(fetch_url, {
       method: 'GET',
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({
-          title: responseJson.title,
-          topics: responseJson.topics,
-          pages: responseJson.pages,
-          persons: responseJson.persons
-        });
+        if (this.mounted) {
+          this.setState({
+            title: responseJson.title,
+            topics: responseJson.topics,
+            pages: responseJson.pages,
+            persons: responseJson.persons
+          });
+        }
       });
   }
 
@@ -42,7 +58,7 @@ class Conference extends React.Component {
     if (this.state.topics) {
       this.state.topics.forEach((row, index) => {
         topics.push(
-              <Typography key={row} variant="body2" color="textSecondary" align="right">{row}</Typography>
+          <Typography key={row} variant="body2" color="textSecondary" align="right">{row}</Typography>
         )
       })
     }
@@ -53,7 +69,7 @@ class Conference extends React.Component {
             <Grid container spacing={1}>
               <Typography variant="h5" color="textPrimary">{this.state.title}</Typography>
             </Grid>
-            <Grid style={{margin: 20, padding: 20}} container justify="space-between">
+            <Grid style={{ margin: 20, padding: 20 }} container justify="space-between">
               {topics}
             </Grid>
             <Grid container spacing={1}>
@@ -89,12 +105,12 @@ class ConferencePersons extends React.Component {
             {this.props.persons.map(row => (
               <TableRow key={row.role + row.id}>
                 <TableCell align="right">
-                  <Link onClick={() => this.props.selectPerson(row.id)}>
+                  <Link to={'/person/' + row.id}>
                     {row.name}
                   </Link>
                 </TableCell>
                 <TableCell align="right">
-                  <Link onClick={() => this.props.selectOrganization(row.org_id)}>
+                  <Link to={'/org/' + row.org_id}>
                     {row.org}
                   </Link>
                 </TableCell>
@@ -125,9 +141,9 @@ class ConferenceInfo extends React.Component {
           {this.props.pages.map(row => (
             <TableRow key={row[0]}>
               <TableCell>
-                <Link target="_blank" href={row[0]}>
+                <a target="_blank" rel="noopener noreferrer" href={row[0]}>
                   {row[0]}
-                </Link>
+                </a>
               </TableCell>
             </TableRow>
           ))}
@@ -136,4 +152,4 @@ class ConferenceInfo extends React.Component {
     )
   }
 }
-export default Conference;
+export default withRouter(Conference);

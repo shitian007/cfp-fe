@@ -4,14 +4,15 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Link, Typography } from '@material-ui/core';
-import { IP } from './constants'
+import { Typography } from '@material-ui/core';
+import { Link, withRouter } from 'react-router-dom';
+import { backendIP } from './constants'
 
-class Organization extends React.Component {
+class Person extends React.Component {
   constructor(props) {
     super(props);
+    this.mounted = false;
     this.state = {
-      id: this.props.id,
       name: '',
       org: '',
       confs: []
@@ -19,19 +20,33 @@ class Organization extends React.Component {
     this.getPersonInfo();
   }
 
+  componentDidMount() {
+    this.mounted = true;
+    this.unlisten = this.props.history.listen((location, action) => {
+      this.getPersonInfo();
+    });
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+    this.unlisten();
+  }
+
   getPersonInfo = () => {
-    let fetch_url = IP + 'person?id=' + this.state.id;
+    let fetch_url = backendIP + 'person?id=' + this.props.match.params.id;
     fetch(fetch_url, {
       method: 'GET',
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({
-          name: responseJson.name,
-          org_id: responseJson.org.id,
-          org: responseJson.org.text,
-          confs: responseJson.conferences
-        });
+        if (this.mounted) {
+          this.setState({
+            name: responseJson.name,
+            org_id: responseJson.org.id,
+            org: responseJson.org.text,
+            confs: responseJson.conferences
+          });
+        }
       });
   }
   render() {
@@ -39,7 +54,7 @@ class Organization extends React.Component {
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
         <div>
           <Typography variant="h5" color="textPrimary">{this.state.name}</Typography>
-          <Link onClick={() => this.props.selectOrganization(this.state.org_id)}>
+          <Link to={'/org/' + this.state.org_id}>
             {this.state.org}
           </Link>
         </div>
@@ -58,7 +73,7 @@ class Organization extends React.Component {
             {this.state.confs.map((conf, index) => (
               <TableRow key={conf.id + conf.role}>
                 <TableCell>
-                  <Link onClick={() => this.props.selectConference(conf.id)}>
+                  <Link to={'/conf/' + conf.id}>
                     {conf.title}
                   </Link>
                 </TableCell>
@@ -74,4 +89,4 @@ class Organization extends React.Component {
   }
 }
 
-export default Organization;
+export default withRouter(Person);

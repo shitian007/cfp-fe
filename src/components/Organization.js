@@ -4,31 +4,46 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Link, Typography } from '@material-ui/core';
-import { IP } from './constants'
+import { Typography } from '@material-ui/core';
+import { Link, withRouter } from 'react-router-dom';
+import { backendIP } from './constants'
 
 class Organization extends React.Component {
   constructor(props) {
     super(props);
+    this.mounted = false;
     this.state = {
-      id: this.props.id,
       name: '',
       persons: []
     }
     this.getOrganizationInfo();
   }
 
+  componentDidMount() {
+    this.mounted = true;
+    this.unlisten = this.props.history.listen((location, action) => {
+      this.getOrganizationInfo();
+    });
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+    this.unlisten();
+  }
+
   getOrganizationInfo = () => {
-    let fetch_url = IP + 'org?id=' + this.state.id;
+    let fetch_url = backendIP + 'org?id=' + this.props.match.params.id;
     fetch(fetch_url, {
       method: 'GET',
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({
-          name: responseJson.name,
-          persons: responseJson.persons
-        });
+        if (this.mounted) {
+          this.setState({
+            name: responseJson.name,
+            persons: responseJson.persons
+          });
+        }
       });
   }
   render() {
@@ -49,7 +64,7 @@ class Organization extends React.Component {
             {this.state.persons.map(person => (
               <TableRow key={person.id}>
                 <TableCell>
-                  <Link onClick={() => this.props.selectPerson(person.id)}>
+                  <Link to={'/person/' + person.id}>
                     {person.text}
                   </Link>
                 </TableCell>
@@ -62,4 +77,4 @@ class Organization extends React.Component {
   }
 }
 
-export default Organization;
+export default withRouter(Organization);

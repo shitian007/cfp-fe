@@ -4,30 +4,68 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Grid, Link, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { backendIP } from './constants';
+import { Link, withRouter } from 'react-router-dom';
 
 class SearchPage extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.mounted = false;
+    this.state = {
+      searchResults: []
+    }
+    this.getResults();
+  }
+
+  componentDidMount() {
+    this.mounted = true;
+    this.unlisten = this.props.history.listen((location, action) => {
+      this.getResults();
+    });
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+    this.unlisten();
+  }
+
+  getResults = () => {
+    let fetch_url = backendIP + 'search?search_val=' + this.props.match.params.searchVal;
+    fetch(fetch_url, {
+      method: 'GET'
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (this.mounted) {
+          this.setState({
+            searchResults: responseJson.results
+          });
+        }
+      })
+  }
+
   render() {
     let searchRows = [];
-    this.props.searchResults.forEach((row, index) => {
+    this.state.searchResults.forEach((row, index) => {
       let rowContent = <div>Unknown</div>;
       if (row.type === "person") {
         rowContent =
           <div>
-            <Link onClick={() => this.props.selectPerson(row.id)}>
+            <Link to={`/person/` + row.id}>
               {row.name}
             </Link>
             <Typography variant="body2">{row.org}</Typography>
           </div>
       } else if (row.type === "org") {
         rowContent =
-          <Link onClick={() => this.props.selectOrganization(row.id)}>
+          <Link to={`/org/` + row.id}>
             {row.text}
           </Link>
       } else if (row.type === "conf") {
         rowContent =
-          <Link onClick={() => this.props.selectConference(row.id)}>
+          <Link to={`/conf/` + row.id}>
             {row.text}
           </Link>
       } else {
@@ -51,7 +89,7 @@ class SearchPage extends React.Component {
           <TableHead>
             <TableRow>
               <TableCell>
-              <Typography variant="h6" color="textSecondary" align="left">Search Results</Typography>
+                <Typography variant="h6" color="textSecondary" align="left">Search Results</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -64,4 +102,4 @@ class SearchPage extends React.Component {
   }
 }
 
-export default SearchPage;
+export default withRouter(SearchPage);

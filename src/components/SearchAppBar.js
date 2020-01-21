@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { IP } from './constants'
+import { backendIP } from './constants'
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 
@@ -36,7 +36,7 @@ class SearchAppBar extends React.Component {
 
   // Debounced search results retrieval
   getSearchResults = (searchVal) => {
-    let fetch_url = IP + 'autocomplete_search?search_val=' + searchVal;
+    let fetch_url = backendIP + 'autocomplete_search?search_val=' + searchVal;
     fetch(fetch_url, {
       method: 'GET',
     })
