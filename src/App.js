@@ -27,6 +27,10 @@ class Base extends React.Component {
     this.search = this.search.bind(this);
   }
 
+  componentDidMount() {
+    document.title = "CFP Mining";
+  }
+
   search = (searchVal) => {
     this.props.history.push('/search/' + searchVal);
   }
