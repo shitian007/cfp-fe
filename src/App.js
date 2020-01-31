@@ -42,8 +42,9 @@ class Base extends React.Component {
           search={this.search}
         />
         <Switch>
-          <Route path='/' exact>
+          <Route path='/home' exact render={(props) =>
             <Home />
+          }>
           </Route>
           <Route path='/search/:searchVal' render={(props) =>
             <SearchPage/>
