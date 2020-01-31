@@ -15,8 +15,18 @@ cors = CORS(app)
 
 @app.route('/home')
 @cross_origin()
-def hello():
-    return "Home"
+def home():
+    with sqlite3.connect(db_filepath) as cnx:
+        max_results = 30
+        cur = cnx.cursor()
+        confs = Jsonifier.conf_years(cur.execute(SearchQueries.home_confs(0, 2020, max_results)).fetchall())
+        person_orgs = Jsonifier.person_org(cur.execute(SearchQueries.home_person_orgs(max_results)).fetchall())
+        orgs = Jsonifier.id_name(cur.execute(SearchQueries.home_orgs(max_results)).fetchall(), 'org')
+    return {
+        'confs': confs,
+        'persons': person_orgs,
+        'orgs': orgs
+    }
 
 @app.route('/autocomplete_search')
 @cross_origin()
@@ -66,7 +76,7 @@ def get_person():
         person_confs = Jsonifier.person_confs(cur.execute(SearchQueries.person_confs(person_id)).fetchall())
     return {
         'name': person_name[0],
-        'org': person_org[0] if person_org else "", # id_name processes for list 
+        'org': person_org[0] if person_org else "", # id_name processes for list
         'conferences': person_confs
     }
 
