@@ -6,6 +6,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { backendIP } from './constants'
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
+import { Link, withRouter } from 'react-router-dom';
 
 const styles = theme => ({
   title: {
@@ -59,16 +60,18 @@ class SearchAppBar extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.grow}>
-        <div className={classes.title}>
-          Mining Call for Papers
-        </div>
+        <Link to={'/home'}>
+          <div className={classes.title}>
+            Mining Call for Papers
+          </div>
+        </Link>
         <Autocomplete
-          onKeyPress={(e)=>  {
+          onKeyPress={(e) => {
             if (e.key === "Enter") {
               this.props.search(this.state.searchVal);
             }
           }
-        }
+          }
           getOptionLabel={
             (option) => {
               return (typeof option === "string") ? option : option.text;
@@ -100,4 +103,4 @@ class SearchAppBar extends React.Component {
   }
 }
 
-export default withStyles(styles)(SearchAppBar);
+export default withRouter(withStyles(styles)(SearchAppBar));
