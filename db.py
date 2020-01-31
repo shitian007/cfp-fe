@@ -100,12 +100,14 @@ def get_conf():
     with sqlite3.connect(db_filepath) as cnx:
         cur = cnx.cursor()
         conf_title = cur.execute(SearchQueries.conf_title(conf_id)).fetchone()
+        conf_score = cur.execute(SearchQueries.conf_score(conf_id)).fetchone()
         conf_topics = cur.execute(SearchQueries.conf_topics(conf_id)).fetchone()
         conf_pages = cur.execute(SearchQueries.conf_pages(conf_id)).fetchall()
         conf_persons = cur.execute(SearchQueries.conf_persons(conf_id)).fetchall()
     return {
         'id': conf_id,
         'title': conf_title,
+        'score': conf_score,
         'topics': eval(conf_topics[0]),
         'pages': conf_pages,
         'persons': Jsonifier.conf_persons(conf_persons)

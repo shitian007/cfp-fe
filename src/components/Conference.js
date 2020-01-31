@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import { Grid, Typography } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP } from './constants'
+import _ from 'lodash';
 
 class Conference extends React.Component {
   constructor(props) {
@@ -18,7 +19,8 @@ class Conference extends React.Component {
       id: this.props.id,
       title: '',
       pages: [],
-      persons: []
+      persons: [],
+      score: ''
     }
     this.getConferenceInfo();
   }
@@ -47,7 +49,8 @@ class Conference extends React.Component {
             title: responseJson.title,
             topics: responseJson.topics,
             pages: responseJson.pages,
-            persons: responseJson.persons
+            persons: responseJson.persons,
+            score: responseJson.score
           });
         }
       });
@@ -67,7 +70,10 @@ class Conference extends React.Component {
         <Grid container spacing={3}>
           <Grid item xs>
             <Grid container spacing={1}>
-              <Typography variant="h5" color="textPrimary">{this.state.title}</Typography>
+              <Typography variant="h5" color="textPrimary"> {this.state.title} </Typography>
+            </Grid>
+            <Grid style={{marginTop: 10}}>
+              <Typography variant="h4" color="textSecondary"> Score: {this.state.score} </Typography>
             </Grid>
             <Grid style={{ margin: 20, padding: 20 }} container justify="space-between">
               {topics}
@@ -91,30 +97,34 @@ class Conference extends React.Component {
 
 class ConferencePersons extends React.Component {
   render() {
+    let persons = _.sortBy(this.props.persons, p => p.score).reverse();
+
     return (
       <TableContainer style={{ marginRight: 50 }} component={Paper}>
         <Table size="small">
           <TableHead>
             <TableRow style={{ background: 'lightgrey' }}>
-              <TableCell align="right">Person&nbsp;</TableCell>
-              <TableCell align="right">Organization&nbsp;</TableCell>
+              <TableCell align="right">Person&nbsp;[Score]</TableCell>
+              <TableCell align="right">Organization&nbsp;[Score]</TableCell>
               <TableCell align="right">Role&nbsp;</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.persons.map(row => (
-              <TableRow key={row.role + row.id}>
+            {persons.map(person => (
+              <TableRow key={person.role + person.id}>
                 <TableCell align="right">
-                  <Link to={'/person/' + row.id}>
-                    {row.name}
+                  <Link to={'/person/' + person.id}>
+                    {person.name}
                   </Link>
+                  &nbsp;[{person.score}]
                 </TableCell>
                 <TableCell align="right">
-                  <Link to={'/org/' + row.org_id}>
-                    {row.org}
+                  <Link to={'/org/' + person.org_id}>
+                    {person.org}
                   </Link>
+                  &nbsp;[{person.org_score}]
                 </TableCell>
-                <TableCell align="right">{row.role}</TableCell>
+                <TableCell align="right">{person.role}</TableCell>
               </TableRow>
             ))}
           </TableBody>
