@@ -7,6 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { Typography } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP } from './constants'
+import _ from 'lodash';
 
 class Person extends React.Component {
   constructor(props) {
@@ -41,6 +42,7 @@ class Person extends React.Component {
       .then((responseJson) => {
         if (this.mounted) {
           this.setState({
+            score: responseJson.score,
             name: responseJson.name,
             org_id: responseJson.org.id,
             org: responseJson.org.text,
@@ -49,11 +51,16 @@ class Person extends React.Component {
         }
       });
   }
+
   render() {
+
+    let confs = _.sortBy(this.state.confs, c => c.score).reverse();
+
     return (
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
         <div>
           <Typography variant="h5" color="textPrimary">{this.state.name}</Typography>
+          <Typography variant="h5" color="textSecondary"> Score: {this.state.score} </Typography>
           <Link to={'/org/' + this.state.org_id}>
             {this.state.org}
           </Link>
@@ -67,10 +74,13 @@ class Person extends React.Component {
               <TableCell>
                 <Typography variant="body2" color="textSecondary">Role</Typography>
               </TableCell>
+              <TableCell>
+                <Typography variant="body2" color="textSecondary">Score</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.confs.map((conf, index) => (
+            {confs.map((conf, index) => (
               <TableRow key={conf.id + conf.role}>
                 <TableCell>
                   <Link to={'/conf/' + conf.id}>
@@ -79,6 +89,9 @@ class Person extends React.Component {
                 </TableCell>
                 <TableCell>
                   <Typography>{conf.role}</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography>{conf.score}</Typography>
                 </TableCell>
               </TableRow>
             ))}
