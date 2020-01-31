@@ -35,9 +35,11 @@ class Jsonifier:
             'type': 'person',
             'id': person[0],
             'name': person[1],
-            'org_id': person[2],
-            'org': person[3],
-            'role': person[4]
+            'score': person[2],
+            'org_id': person[3],
+            'org': person[4],
+            'org_score': person[5],
+            'role': person[6]
             } for person in persons]
 
     @staticmethod
@@ -46,7 +48,8 @@ class Jsonifier:
             'type': 'conf',
             'role': conf[0],
             'id': conf[1],
-            'title': conf[2]
+            'title': conf[2],
+            'score': conf[3]
         } for conf in confs]
 
 
@@ -71,11 +74,11 @@ class SearchQueries:
 
     # Person Lookup
     person_name = lambda person_id: "SELECT name FROM Persons WHERE id={}".format(person_id)
-    person_score = lambda person_score: "SELECT score FROM Persons WHERE id={}".format(person_id)
+    person_score = lambda person_id: "SELECT score FROM Persons WHERE id={}".format(person_id)
     person_org = lambda person_id: "SELECT o.id, o.name, o.score\
         FROM Persons p\
         JOIN Organizations o ON p.org_id=o.id WHERE p.id={}".format(person_id)
-    person_confs = lambda person_id: "SELECT pr.role_type, wc.id, wc.title\
+    person_confs = lambda person_id: "SELECT pr.role_type, wc.id, wc.title, wc.score\
         FROM Persons p\
         JOIN PersonRole pr ON pr.person_id=p.id\
         JOIN WikicfpConferences wc ON pr.conf_id=wc.id WHERE p.id={}".format(person_id)
@@ -89,10 +92,10 @@ class SearchQueries:
 
     # Conference Lookup
     conf_title = lambda conf_id: "SELECT title FROM WikicfpConferences WHERE id={}".format(conf_id)
-    conf_score = lambda conf_id: "SELECT score FROM WikcfpConferences WHERE id={}".format(conf_id)
+    conf_score = lambda conf_id: "SELECT score FROM WikicfpConferences WHERE id={}".format(conf_id)
     conf_topics = lambda conf_id: "SELECT categories FROM WikicfpConferences WHERE id={}".format(conf_id)
     conf_pages = lambda conf_id: "SELECT url FROM ConferencePages WHERE conf_id={}".format(conf_id)
-    conf_persons = lambda conf_id: "SELECT p.id, p.name, o.id, o.name, pr.role_type\
+    conf_persons = lambda conf_id: "SELECT p.id, p.name, p.score, o.id, o.name, o.score, pr.role_type\
         FROM Persons p\
         JOIN PersonRole pr ON p.id=pr.person_id\
         LEFT JOIN Organizations o ON o.id=p.org_id\
