@@ -7,6 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { Typography } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP } from './constants'
+import _ from 'lodash';
 
 class Organization extends React.Component {
   constructor(props) {
@@ -41,32 +42,39 @@ class Organization extends React.Component {
         if (this.mounted) {
           this.setState({
             name: responseJson.name,
+            score: responseJson.score,
             persons: responseJson.persons
           });
         }
       });
   }
   render() {
+    let persons = _.sortBy(this.state.persons, p => p.score).reverse();
     return (
       <div style={{ margin: 30, display: 'flex', justifyContent: 'center' }}>
         <div>
           <Typography variant="h5" color="textPrimary">{this.state.name}</Typography>
+          <Typography variant="h5" color="textSecondary">Score: {this.state.score}</Typography>
         </div>
         <Table style={{ width: 500 }} size="small">
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="body1" color="textSecondary">Persons</Typography>
+                <Typography variant="body1" color="textSecondary">Person</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="body1" color="textSecondary">Score</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.persons.map(person => (
+            {persons.map(person => (
               <TableRow key={person.id}>
                 <TableCell>
-                  <Link to={'/person/' + person.id}>
-                    {person.text}
-                  </Link>
+                  <Link to={'/person/' + person.id}> {person.text} </Link>
+                </TableCell>
+                <TableCell>
+                  {person.score}
                 </TableCell>
               </TableRow>
             ))}

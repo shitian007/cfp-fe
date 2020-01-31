@@ -72,10 +72,12 @@ def get_person():
     with sqlite3.connect(db_filepath) as cnx:
         cur = cnx.cursor()
         person_name = cur.execute(SearchQueries.person_name(person_id)).fetchone()
+        person_score = cur.execute(SearchQueries.person_score(person_id)).fetchone()
         person_org = Jsonifier.id_name(cur.execute(SearchQueries.person_org(person_id)).fetchall(), 'org')
         person_confs = Jsonifier.person_confs(cur.execute(SearchQueries.person_confs(person_id)).fetchall())
     return {
         'name': person_name[0],
+        'score': person_score[0],
         'org': person_org[0] if person_org else "", # id_name processes for list
         'conferences': person_confs
     }
@@ -87,9 +89,11 @@ def get_org():
     with sqlite3.connect(db_filepath) as cnx:
         cur = cnx.cursor()
         org_name = cur.execute(SearchQueries.org_name(org_id)).fetchone()
+        org_score = cur.execute(SearchQueries.org_score(org_id)).fetchone()
         org_persons = Jsonifier.id_name(cur.execute(SearchQueries.org_persons(org_id)).fetchall(), 'person')
     return {
         'name': org_name,
+        'score': org_score,
         'persons': org_persons
     }
 
