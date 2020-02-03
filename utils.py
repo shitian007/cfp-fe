@@ -19,7 +19,6 @@ class Jsonifier:
 
     @staticmethod
     def person_org(person_orgs):
-        print(person_orgs)
         return [{
             'type': 'person',
             'id': po[0],
@@ -66,7 +65,7 @@ class SearchQueries:
     # Generic Searches
     person_search = lambda search_val, num: "SELECT id, name, score FROM Persons WHERE name LIKE \'%{}%\' GROUP BY name LIMIT {}".format(
         search_val, num)
-    person_org_search = lambda search_val, num: "SELECT p.id, p.name, o.id, o.name, p.score FROM Persons p\
+    person_org_search = lambda search_val, num: "SELECT p.id, p.name, p.score, o.id, o.name FROM Persons p\
                                             LEFT JOIN Organizations o ON p.org_id=o.id WHERE p.name LIKE \'%{}%\' GROUP BY\
                                             p.name, o.name LIMIT {}".format( search_val, num)
     org_search = lambda search_val, num: "SELECT id, name, score FROM Organizations WHERE name LIKE \'%{}%\' GROUP BY name LIMIT {}".format(search_val, num)

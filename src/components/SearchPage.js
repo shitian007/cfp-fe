@@ -60,14 +60,10 @@ class SearchPage extends React.Component {
           </div>
       } else if (row.type === "org") {
         rowContent =
-          <Link to={`/org/` + row.id}>
-            {row.text}
-          </Link>
+          <Link to={`/org/` + row.id}> {row.text} </Link>
       } else if (row.type === "conf") {
         rowContent =
-          <Link to={`/conf/` + row.id}>
-            {row.text}
-          </Link>
+          <Link to={`/conf/` + row.id}> {row.text} </Link>
       } else {
         rowContent = <div>Unknown Results</div>
       }
