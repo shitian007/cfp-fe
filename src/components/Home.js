@@ -16,17 +16,17 @@ class Home extends React.Component {
     this.state = {
       confs: [],
       persons: [],
-      orgs: []
+      orgs: [],
     }
     this.getHomeInfo();
   }
 
   componentDidMount() {
     this.mounted = true;
-    console.log(this.props.history);
     this.unlisten = this.props.history.listen((location, action) => {
       this.getHomeInfo();
     });
+    this.props.setLoadingState(true);
   }
 
   componentWillUnmount() {
@@ -47,6 +47,7 @@ class Home extends React.Component {
             persons: responseJson.persons,
             orgs: responseJson.orgs,
           });
+          this.props.setLoadingState(false);
         }
       });
   }

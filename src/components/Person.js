@@ -26,6 +26,7 @@ class Person extends React.Component {
     this.unlisten = this.props.history.listen((location, action) => {
       this.getPersonInfo();
     });
+    this.props.setLoadingState(true);
   }
 
   componentWillUnmount() {
@@ -48,6 +49,7 @@ class Person extends React.Component {
             org: responseJson.org.text,
             confs: responseJson.conferences
           });
+          this.props.setLoadingState(false);
         }
       });
   }

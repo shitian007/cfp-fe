@@ -30,6 +30,7 @@ class Conference extends React.Component {
     this.unlisten = this.props.history.listen((location, action) => {
       this.getConferenceInfo();
     });
+    this.props.setLoadingState(true);
   }
 
   componentWillUnmount() {
@@ -52,6 +53,7 @@ class Conference extends React.Component {
             persons: responseJson.persons,
             score: responseJson.score
           });
+          this.props.setLoadingState(false);
         }
       });
   }

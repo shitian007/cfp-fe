@@ -24,6 +24,7 @@ class SearchPage extends React.Component {
     this.unlisten = this.props.history.listen((location, action) => {
       this.getResults();
     });
+    this.props.setLoadingState(true);
   }
 
   componentWillUnmount() {
@@ -42,6 +43,7 @@ class SearchPage extends React.Component {
           this.setState({
             searchResults: responseJson.results
           });
+          this.props.setLoadingState(false);
         }
       })
   }

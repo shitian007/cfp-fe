@@ -25,6 +25,7 @@ class Organization extends React.Component {
     this.unlisten = this.props.history.listen((location, action) => {
       this.getOrganizationInfo();
     });
+    this.props.setLoadingState(true);
   }
 
   componentWillUnmount() {
@@ -45,6 +46,7 @@ class Organization extends React.Component {
             score: responseJson.score,
             persons: responseJson.persons
           });
+          this.props.setLoadingState(false);
         }
       });
   }

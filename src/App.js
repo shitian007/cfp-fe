@@ -5,6 +5,7 @@ import Conference from './components/Conference'
 import Organization from './components/Organization'
 import Home from './components/Home'
 import SearchPage from './components/SearchPage'
+import { CircularProgress, Box } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 
@@ -25,6 +26,9 @@ class Base extends React.Component {
   constructor(props) {
     super(props)
     this.search = this.search.bind(this);
+    this.state = {
+      loading: true
+    }
   }
 
   componentDidMount() {
@@ -35,30 +39,45 @@ class Base extends React.Component {
     this.props.history.push('/search/' + searchVal);
   }
 
+  setLoadingState = (loadingState) => {
+    this.setState({
+      loading: loadingState
+    });
+  }
+
   render() {
     return (
       <div style={{ margin: 10 }}>
         <SearchAppBar
           search={this.search}
         />
-        <Switch>
-          <Route path='/(home|)' exact render={(props) =>
-            <Home />
-          }>
-          </Route>
-          <Route path='/search/:searchVal' render={(props) =>
-            <SearchPage/>
-          } />
-          <Route path='/person/:id' render={(props) =>
-            <Person/>
-          } />
-          <Route path='/org/:id' render={(props) =>
-            <Organization/>
-          } />
-          <Route path='/conf/:id' render={(props) =>
-            <Conference/>
-          } />
-        </Switch>
+        <Box
+          display={this.state.loading ? "flex" : "none"}
+          justifyContent="center"
+          style={{margin: 100}}
+        >
+          <CircularProgress size={40} />
+        </Box>
+        <Box visibility={this.state.loading ? "hidden" : "visible"}>
+          <Switch>
+            <Route path='/(home|)' exact render={(props) =>
+              <Home setLoadingState={this.setLoadingState} />
+            }>
+            </Route>
+            <Route path='/search/:searchVal' render={(props) =>
+              <SearchPage setLoadingState={this.setLoadingState} />
+            } />
+            <Route path='/person/:id' render={(props) =>
+              <Person setLoadingState={this.setLoadingState} />
+            } />
+            <Route path='/org/:id' render={(props) =>
+              <Organization setLoadingState={this.setLoadingState} />
+            } />
+            <Route path='/conf/:id' render={(props) =>
+              <Conference setLoadingState={this.setLoadingState} />
+            } />
+          </Switch>
+        </Box>
       </div >
     )
   }
