@@ -42,7 +42,7 @@ class Base extends React.Component {
           search={this.search}
         />
         <Switch>
-          <Route path='/home' exact render={(props) =>
+          <Route path='/(home|)' exact render={(props) =>
             <Home />
           }>
           </Route>
