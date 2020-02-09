@@ -1,10 +1,9 @@
+import gscholar_icon from './assets/gscholar_icon.png';
+import orcid_icon from './assets/orcid_icon.png';
+import aminer_icon from './assets/aminer_icon.png';
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import { Typography } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP } from './constants'
 import _ from 'lodash';
@@ -66,18 +65,41 @@ class Person extends React.Component {
           <Link to={'/org/' + this.state.org_id}>
             {this.state.org}
           </Link>
+          <div style={{ margin: 50, alignContent: 'left', fontSize: 12 }}>
+            <Box style={{ margin: 10 }}>
+              <img style={{ height: 20 }} src={gscholar_icon} alt="google scholar" />
+              Google Scholar:&nbsp;
+              <a target="_black" rel="noopener noreferrer" href={"https://www.google.com"}>
+                {"Placeholder"}
+              </a>
+            </Box>
+            <Box style={{ margin: 10 }}>
+              <img style={{ height: 20 }} src={orcid_icon} alt="orcid" />
+              orcID:&nbsp;
+              <a target="_black" rel="noopener noreferrer" href={"https://www.orcid.org"}>
+                {"Placeholder"}
+              </a>
+            </Box>
+            <Box style={{ margin: 10 }}>
+              <img style={{ height: 20 }} src={aminer_icon} alt="aminer" />
+              Aminer:&nbsp;
+              <a target="_black" rel="noopener noreferrer" href={"https://www.aminer.cn"}>
+                {"Placeholder"}
+              </a>
+            </Box>
+          </div>
         </div>
         <Table style={{ width: 800 }} size="small">
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="body2" color="textSecondary">Conference</Typography>
+                <Typography variant="body1" color="textSecondary">Conference</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2" color="textSecondary">Role</Typography>
+                <Typography variant="body1" color="textSecondary">Role</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2" color="textSecondary">Score</Typography>
+                <Typography variant="body1" color="textSecondary">Score</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -90,10 +112,10 @@ class Person extends React.Component {
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Typography>{conf.role}</Typography>
+                  <Typography variant="body2">{conf.role}</Typography>
                 </TableCell>
                 <TableCell>
-                  <Typography>{conf.score}</Typography>
+                  <Typography variant="body2">{conf.score}</Typography>
                 </TableCell>
               </TableRow>
             ))}
