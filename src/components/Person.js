@@ -1,5 +1,6 @@
 import gscholar_icon from './assets/gscholar_icon.png';
 import orcid_icon from './assets/orcid_icon.png';
+import dblp_icon from './assets/dblp_icon.png';
 import aminer_icon from './assets/aminer_icon.png';
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
@@ -68,21 +69,28 @@ class Person extends React.Component {
           <div style={{ margin: 50, alignContent: 'left', fontSize: 12 }}>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={gscholar_icon} alt="google scholar" />
-              Google Scholar:&nbsp;
+              &nbsp;Google Scholar:&nbsp;
               <a target="_black" rel="noopener noreferrer" href={"https://www.google.com"}>
                 {"Placeholder"}
               </a>
             </Box>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={orcid_icon} alt="orcid" />
-              orcID:&nbsp;
+              &nbsp;orcID:&nbsp;
               <a target="_black" rel="noopener noreferrer" href={"https://www.orcid.org"}>
                 {"Placeholder"}
               </a>
             </Box>
             <Box style={{ margin: 10 }}>
+              <img style={{ height: 20 }} src={dblp_icon} alt="dblp" />
+              &nbsp;dblp:&nbsp;
+              <a target="_black" rel="noopener noreferrer" href={"https://dblp.uni-trier.de/"}>
+                {"Placeholder"}
+              </a>
+            </Box>
+            <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={aminer_icon} alt="aminer" />
-              Aminer:&nbsp;
+              &nbsp;Aminer:&nbsp;
               <a target="_black" rel="noopener noreferrer" href={"https://www.aminer.cn"}>
                 {"Placeholder"}
               </a>
