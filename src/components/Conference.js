@@ -1,12 +1,7 @@
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { TableContainer, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, Chip } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP } from './constants'
 import _ from 'lodash';
@@ -63,7 +58,7 @@ class Conference extends React.Component {
     if (this.state.topics) {
       this.state.topics.forEach((row, index) => {
         topics.push(
-          <Typography key={row} variant="body2" color="textSecondary" align="right">{row}</Typography>
+          <Chip style={{marginRight: 20}} key={row} label={row}></Chip>
         )
       })
     }
@@ -77,7 +72,7 @@ class Conference extends React.Component {
             <Grid style={{marginTop: 10}}>
               <Typography variant="h4" color="textSecondary"> Score: {this.state.score} </Typography>
             </Grid>
-            <Grid style={{ margin: 20, padding: 20 }} container justify="space-between">
+            <Grid style={{ margin: 20, padding: 20 }} container justify="center">
               {topics}
             </Grid>
             <Grid container spacing={1}>

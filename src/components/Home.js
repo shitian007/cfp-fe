@@ -97,22 +97,22 @@ class Home extends React.Component {
             <div> <b>NOTE</b> </div>
             Most data on CFP-Mining is mined from individual conference call-for-papers and the verity of the information hence cannot be guaranteed.
             The code for data mining from conferences can be found at&nbsp;
-            <a target="_blank" href="https://github.com/shitian007/cfp-mining">cfp-mining</a>&nbsp;
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/shitian007/cfp-mining">cfp-mining</a>&nbsp;
             and the code for website at&nbsp;
-            <a target="_blank" href="https://github.com/shitian007/cfp-fe">cfp-fe</a>.<br/>
+            <a target="_blank" rel="noopener noreferrer" href="https://github.com/shitian007/cfp-fe">cfp-fe</a>.<br/>
             <Grid container>
               <br/>For lapses or inaccuracy of any data, please request for corresponding updates as follows:
               <div>
                 <b>To ADD or UPDATE Person information: </b> please submit a new issue&nbsp;
-                <a target="_blank" href={personIssueURL}>here</a>
+                <a target="_blank" rel="noopener noreferrer" href={personIssueURL}>here</a>
               </div>
               <div>
                 <b>To ADD a new Conference: </b> please submit a new issue&nbsp;
-                <a target="_blank" href={newConferenceIssueURL}>here</a><br />
+                <a target="_blank" rel="noopener noreferrer" href={newConferenceIssueURL}>here</a><br />
               </div>
               <div>
                 <b>To UPDATE Conference information: </b> please submit a new issue&nbsp;
-                <a target="_blank" href={updateConferenceIssueURL}>here</a><br />
+                <a target="_blank" rel="noopener noreferrer" href={updateConferenceIssueURL}>here</a><br />
               </div>
             </Grid>
           </Box>
