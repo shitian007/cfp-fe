@@ -1,13 +1,9 @@
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { Paper, Tabs, Tab } from '@material-ui/core';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
-import { backendIP } from './constants'
+import { backendIP, personIssueURL } from './constants'
 
 class Home extends React.Component {
 
@@ -48,7 +44,7 @@ class Home extends React.Component {
             confs: responseJson.confs,
             persons: responseJson.persons,
             orgs: responseJson.orgs,
-            tabDisplay: <TopConferences confs={responseJson.confs}/>
+            tabDisplay: <TopConferences confs={responseJson.confs} />
           });
           this.props.setLoadingState(false);
         }
@@ -61,15 +57,15 @@ class Home extends React.Component {
     });
     if (value === 0) {
       this.setState({
-        tabDisplay: <TopConferences confs={this.state.confs}/>
+        tabDisplay: <TopConferences confs={this.state.confs} />
       });
     } else if (value === 1) {
       this.setState({
-        tabDisplay: <TopPersons persons={this.state.persons}/>
+        tabDisplay: <TopPersons persons={this.state.persons} />
       });
     } else {
       this.setState({
-        tabDisplay: <TopOrganizations orgs={this.state.orgs}/>
+        tabDisplay: <TopOrganizations orgs={this.state.orgs} />
       });
     }
   }
@@ -78,8 +74,8 @@ class Home extends React.Component {
     return (
       <div style={{ margin: 100, marginTop: 20 }}>
         <Grid container>
-          <Grid item>
-            <Paper square style={{width: 480}}>
+          <Grid item style={{ width: 900 }}>
+            <Paper square style={{ width: 480 }}>
               <Tabs
                 value={this.state.tabDisplayIndex}
                 indicatorColor="primary"
@@ -94,6 +90,17 @@ class Home extends React.Component {
             <Grid container>
               {this.state.tabDisplay}
             </Grid>
+          </Grid>
+          <Grid item style={{ margin: 50 }}>
+            <Box display="block" style={{ width: 500, fontSize: 14 }}>
+              <p><b>NOTE</b></p>
+              All <i>Conference</i>, <i>Person</i>, <i>Organization</i> data on CFP-Mining is mined from individual Conference call-for-papers
+              and the verity of the information hence cannot be guaranteed. For lapses or inaccuracy of any data, please request for corresponding updates as follows:
+              <p>
+                <b>For updating of Person information: </b> please submit a new issue&nbsp;
+                <a target="_blank" href={personIssueURL}>here</a>
+              </p>
+            </Box>
           </Grid>
         </Grid>
       </div>
