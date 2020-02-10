@@ -71,28 +71,28 @@ class Person extends React.Component {
               <img style={{ height: 20 }} src={gscholar_icon} alt="google scholar" />
               &nbsp;Google Scholar:&nbsp;
               <a target="_black" rel="noopener noreferrer" href={"https://www.google.com"}>
-                {"Placeholder"}
+                {"In progress"}
               </a>
             </Box>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={orcid_icon} alt="orcid" />
               &nbsp;orcID:&nbsp;
               <a target="_black" rel="noopener noreferrer" href={"https://www.orcid.org"}>
-                {"Placeholder"}
+                {"In progress"}
               </a>
             </Box>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={dblp_icon} alt="dblp" />
               &nbsp;dblp:&nbsp;
               <a target="_black" rel="noopener noreferrer" href={"https://dblp.uni-trier.de/"}>
-                {"Placeholder"}
+                {"In progress"}
               </a>
             </Box>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={aminer_icon} alt="aminer" />
               &nbsp;Aminer:&nbsp;
               <a target="_black" rel="noopener noreferrer" href={"https://www.aminer.cn"}>
-                {"Placeholder"}
+                {"In progress"}
               </a>
             </Box>
           </div>
