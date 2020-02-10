@@ -73,8 +73,8 @@ class Home extends React.Component {
   render() {
     return (
       <div style={{ margin: 100, marginTop: 20 }}>
-        <Grid container>
-          <Grid item style={{ width: 900 }}>
+        <Grid container justify="center">
+          <Grid container justify="center">
             <Paper square style={{ width: 480 }}>
               <Tabs
                 value={this.state.tabDisplayIndex}
@@ -87,21 +87,21 @@ class Home extends React.Component {
                 <Tab label="Organizations" />
               </Tabs>
             </Paper>
-            <Grid container>
-              {this.state.tabDisplay}
-            </Grid>
           </Grid>
-          <Grid item style={{ margin: 50 }}>
-            <Box display="block" style={{ width: 500, fontSize: 14 }}>
-              <p><b>NOTE</b></p>
-              All <i>Conference</i>, <i>Person</i>, <i>Organization</i> data on CFP-Mining is mined from individual Conference call-for-papers
-              and the verity of the information hence cannot be guaranteed. For lapses or inaccuracy of any data, please request for corresponding updates as follows:
+          <Grid item style={{ width: 1000 }}>
+            {this.state.tabDisplay}
+          </Grid>
+        </Grid>
+        <Grid container justify='center'>
+          <Box display="block" style={{ margin: 20, width: 800, fontSize: 14 }}>
+            <p><b>NOTE</b></p>
+            All <i>Conference</i>, <i>Person</i>, <i>Organization</i> data on CFP-Mining is mined from individual Conference call-for-papers
+            and the verity of the information hence cannot be guaranteed. For lapses or inaccuracy of any data, please request for corresponding updates as follows:
               <p>
-                <b>For updating of Person information: </b> please submit a new issue&nbsp;
+              <b>For updating of Person information: </b> please submit a new issue&nbsp;
                 <a target="_blank" href={personIssueURL}>here</a>
-              </p>
-            </Box>
-          </Grid>
+            </p>
+          </Box>
         </Grid>
       </div>
     )
