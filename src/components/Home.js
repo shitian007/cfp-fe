@@ -4,6 +4,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { Paper, Tabs, Tab } from '@material-ui/core';
 import { Grid, Typography } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP } from './constants'
@@ -17,6 +18,7 @@ class Home extends React.Component {
       confs: [],
       persons: [],
       orgs: [],
+      tabDisplayIndex: 0,
     }
     this.getHomeInfo();
   }
@@ -46,94 +48,143 @@ class Home extends React.Component {
             confs: responseJson.confs,
             persons: responseJson.persons,
             orgs: responseJson.orgs,
+            tabDisplay: <TopConferences confs={responseJson.confs}/>
           });
           this.props.setLoadingState(false);
         }
       });
   }
 
+  handleChange = (event, value) => {
+    this.setState({
+      tabDisplayIndex: value
+    });
+    if (value === 0) {
+      this.setState({
+        tabDisplay: <TopConferences confs={this.state.confs}/>
+      });
+    } else if (value === 1) {
+      this.setState({
+        tabDisplay: <TopPersons persons={this.state.persons}/>
+      });
+    } else {
+      this.setState({
+        tabDisplay: <TopOrganizations orgs={this.state.orgs}/>
+      });
+    }
+  }
+
   render() {
     return (
-      <div style={{ margin: 50 }}>
-        <Grid container spacing={3}>
-          <Grid item md>
-            <Grid container spacing={2}>
-              <Typography variant="h5" color="textPrimary">Top Conferences</Typography>
-            </Grid>
-            <Grid style={{ margin: 20, paddingRight: 40 }} container justify="space-between">
-              <Table size='small'>
-                <TableHead>
-                  <TableRow style={{ background: 'lightgrey' }}>
-                    <TableCell align="left">Conference Name</TableCell>
-                    <TableCell align="left">Year</TableCell>
-                    <TableCell align="left">Score</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.state.confs.map(conf => (
-                    <TableRow key={conf.id} align="left">
-                      <TableCell> <Link to={'/conf/' + conf.id}> {conf.title} </Link> </TableCell>
-                      <TableCell> {conf.year} </TableCell>
-                      <TableCell> {conf.score} </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+      <div style={{ margin: 100, marginTop: 20 }}>
+        <Grid container>
+          <Grid item>
+            <Paper square style={{width: 480}}>
+              <Tabs
+                value={this.state.tabDisplayIndex}
+                indicatorColor="primary"
+                textColor="primary"
+                onChange={this.handleChange}
+              >
+                <Tab label="Conferences" />
+                <Tab label="Persons" />
+                <Tab label="Organizations" />
+              </Tabs>
+            </Paper>
+            <Grid container>
+              {this.state.tabDisplay}
             </Grid>
           </Grid>
-
-          <Grid item sm>
-            <Grid container spacing={1}>
-              <Typography variant="h5" color="textPrimary">Most Impactful People</Typography>
-            </Grid>
-            <Grid style={{ margin: 20, paddingRight: 40 }} container justify="space-between">
-              <Table size='small'>
-                <TableHead>
-                  <TableRow style={{ background: 'lightgrey' }}>
-                    <TableCell align="left">Name</TableCell>
-                    <TableCell align="left">Score</TableCell>
-                    <TableCell align="left">Organization</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.state.persons.map(person => (
-                    <TableRow key={person.id} align="left">
-                      <TableCell> <Link to={'/person/' + person.id}> {person.name} </Link> </TableCell>
-                      <TableCell> {person.score} </TableCell>
-                      <TableCell> <Link to={'/org/' + person.org_id}> {person.org} </Link> </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Grid>
-          </Grid>
-
-          <Grid item sm>
-            <Grid container spacing={1}>
-              <Typography variant="h5" color="textPrimary">Most Impactful Organizations</Typography>
-            </Grid>
-            <Grid style={{ margin: 20, paddingRight: 40 }} container justify="space-between">
-              <Table size='small'>
-                <TableHead>
-                  <TableRow style={{ background: 'lightgrey' }}>
-                    <TableCell align="left">Name</TableCell>
-                    <TableCell align="left">Score</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.state.orgs.map(org => (
-                    <TableRow key={org.id} align="left">
-                      <TableCell> <Link to={'/org/' + org.id}> {org.text} </Link> </TableCell>
-                      <TableCell> {org.score} </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Grid>
-          </Grid>
-
         </Grid>
       </div>
+    )
+  }
+}
+
+class TopConferences extends React.Component {
+  render() {
+    let confs = this.props.confs;
+    return (
+      <Grid item>
+        <Grid style={{ marginTop: 20 }} container justify="space-between">
+          <Table size='small'>
+            <TableHead>
+              <TableRow style={{ background: 'lightgrey' }}>
+                <TableCell align="left">Conference Name</TableCell>
+                <TableCell align="left">Year</TableCell>
+                <TableCell align="left">Score</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {confs.map(conf => (
+                <TableRow key={conf.id} align="left">
+                  <TableCell> <Link to={'/conf/' + conf.id}> {conf.title} </Link> </TableCell>
+                  <TableCell> {conf.year} </TableCell>
+                  <TableCell> {conf.score} </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Grid>
+      </Grid>
+    )
+  }
+}
+
+class TopPersons extends React.Component {
+  render() {
+    let persons = this.props.persons;
+    return (
+      <Grid item>
+        <Grid style={{ marginTop: 20 }} container justify="space-between">
+          <Table size='small'>
+            <TableHead>
+              <TableRow style={{ background: 'lightgrey' }}>
+                <TableCell align="left">Name</TableCell>
+                <TableCell align="left">Score</TableCell>
+                <TableCell align="left">Organization</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {persons.map(person => (
+                <TableRow key={person.id} align="left">
+                  <TableCell> <Link to={'/person/' + person.id}> {person.name} </Link> </TableCell>
+                  <TableCell> {person.score} </TableCell>
+                  <TableCell> <Link to={'/org/' + person.org_id}> {person.org} </Link> </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Grid>
+      </Grid>
+    )
+  }
+}
+
+class TopOrganizations extends React.Component {
+  render() {
+    let organizations = this.props.orgs;
+    return (
+      <Grid item>
+        <Grid style={{ marginTop: 20 }} container justify="space-between">
+          <Table size='small'>
+            <TableHead>
+              <TableRow style={{ background: 'lightgrey' }}>
+                <TableCell align="left">Name</TableCell>
+                <TableCell align="left">Score</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {organizations.map(org => (
+                <TableRow key={org.id} align="left">
+                  <TableCell> <Link to={'/org/' + org.id}> {org.text} </Link> </TableCell>
+                  <TableCell> {org.score} </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Grid>
+      </Grid>
     )
   }
 }
