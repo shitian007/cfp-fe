@@ -4,12 +4,7 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from utils import SearchQueries, Jsonifier
 
-# parser = argparse.ArgumentParser(description='')
-# parser.add_argument('db_filepath', type=str,
-#                     help="Specify database file to predict lines")
-# args = parser.parse_args()
-# db_filepath = args.db_filepath
-db_filepath = './cfp.db'
+db_filepath = "./cfp.db"
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -118,4 +113,6 @@ def get_conf():
         'persons': Jsonifier.conf_persons(conf_persons)
     }
 
-app.run()
+
+if __name__ == "__main__":
+    app.run()
