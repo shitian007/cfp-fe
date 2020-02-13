@@ -3,10 +3,10 @@ import debounce from 'lodash.debounce';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { backendIP } from './constants'
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
+import { backendIP } from './constants'
 
 const styles = theme => ({
   title: {
@@ -60,11 +60,11 @@ class SearchAppBar extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.grow}>
-        <Link to={'/home'}>
-          <div className={classes.title}>
-            Mining Call for Papers
-          </div>
-        </Link>
+        <Typography variant="h3">Mining Call for Papers</Typography>
+        <Grid container justify="center">
+          <Link to={'/home'} style={{margin: 5}}> Home </Link>
+          <Link to={'/about'} style={{margin: 5}}> About </Link>
+        </Grid>
         <Autocomplete
           onKeyPress={(e) => {
             if (e.key === "Enter") {

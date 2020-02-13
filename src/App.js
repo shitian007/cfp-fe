@@ -1,10 +1,11 @@
 import React from 'react';
 import SearchAppBar from './components/SearchAppBar';
-import Person from './components/Person'
-import Conference from './components/Conference'
-import Organization from './components/Organization'
-import Home from './components/Home'
-import SearchPage from './components/SearchPage'
+import Person from './components/Person';
+import Conference from './components/Conference';
+import Organization from './components/Organization';
+import Home from './components/Home';
+import SearchPage from './components/SearchPage';
+import About from './components/About';
 import { CircularProgress, Box } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
@@ -54,7 +55,7 @@ class Base extends React.Component {
         <Box
           display={this.state.loading ? "flex" : "none"}
           justifyContent="center"
-          style={{margin: 100}}
+          style={{ margin: 100 }}
         >
           <CircularProgress size={40} />
         </Box>
@@ -62,8 +63,10 @@ class Base extends React.Component {
           <Switch>
             <Route path='/(home|)' exact render={(props) =>
               <Home setLoadingState={this.setLoadingState} />
-            }>
-            </Route>
+            } />
+            <Route path='/about' exact render={(props) =>
+              <About setLoadingState={this.setLoadingState} />
+            } />
             <Route path='/search/:searchVal' render={(props) =>
               <SearchPage setLoadingState={this.setLoadingState} />
             } />
