@@ -6,7 +6,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { Typography, Box } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
-import { backendIP } from './constants'
+import { backendIP, personIssueURL } from './constants'
 import _ from 'lodash';
 
 class Person extends React.Component {
@@ -43,6 +43,7 @@ class Person extends React.Component {
       .then((responseJson) => {
         if (this.mounted) {
           this.setState({
+            id: responseJson.id,
             score: responseJson.score,
             name: responseJson.name,
             org_id: responseJson.org.id,
@@ -61,12 +62,14 @@ class Person extends React.Component {
     return (
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
         <div>
-          <Typography variant="h5" color="textPrimary">{this.state.name}</Typography>
+          <Typography variant="h5" color="textPrimary">
+            {this.state.name} <span style={{fontSize: 12}}>ID: {this.state.id}</span>
+          </Typography>
           <Typography variant="h5" color="textSecondary"> Score: {this.state.score} </Typography>
           <Link to={'/org/' + this.state.org_id}>
             {this.state.org}
           </Link>
-          <div style={{ margin: 50, alignContent: 'left', fontSize: 12 }}>
+          <div style={{ margin: 30, alignContent: 'left', fontSize: 12 }}>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={gscholar_icon} alt="google scholar" />
               &nbsp;Google Scholar:&nbsp;
@@ -95,6 +98,10 @@ class Person extends React.Component {
                 {"In progress"}
               </a>
             </Box>
+            <div style={{ margin: 60, fontSize: 12 }}>
+              *To report discrepancies and updates to researcher information, please submit an issue&nbsp;
+              <a target="_blank" rel="noopener noreferrer" href={personIssueURL}>here</a>
+            </div>
           </div>
         </div>
         <Table style={{ width: 800 }} size="small">

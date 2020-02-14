@@ -38,6 +38,7 @@ class Organization extends React.Component {
       .then((responseJson) => {
         if (this.mounted) {
           this.setState({
+            id: responseJson.id,
             name: responseJson.name,
             score: responseJson.score,
             persons: responseJson.persons
@@ -51,7 +52,9 @@ class Organization extends React.Component {
     return (
       <div style={{ margin: 30, display: 'flex', justifyContent: 'center' }}>
         <div>
-          <Typography variant="h5" color="textPrimary">{this.state.name}</Typography>
+          <Typography variant="h5" color="textPrimary">
+            {this.state.name} <span style={{fontSize: 12}}>ID: {this.state.id}</span>
+          </Typography>
           <Typography variant="h5" color="textSecondary">Score: {this.state.score}</Typography>
         </div>
         <Table style={{ width: 500 }} size="small">

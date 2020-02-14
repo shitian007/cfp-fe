@@ -3,7 +3,7 @@ import { TableContainer, Table, TableBody, TableCell, TableHead, TableRow } from
 import Paper from '@material-ui/core/Paper';
 import { Grid, Typography, Chip } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
-import { backendIP } from './constants'
+import { backendIP, updateConferenceIssueURL } from './constants'
 import _ from 'lodash';
 
 class Conference extends React.Component {
@@ -43,6 +43,7 @@ class Conference extends React.Component {
       .then((responseJson) => {
         if (this.mounted) {
           this.setState({
+            id: responseJson.id,
             title: responseJson.title,
             topics: responseJson.topics,
             pages: responseJson.pages,
@@ -70,7 +71,9 @@ class Conference extends React.Component {
         <Grid container spacing={3}>
           <Grid item xs>
             <Grid container spacing={1}>
-              <Typography variant="h5" color="textPrimary"> {this.state.title} </Typography>
+            <Typography variant="h5" color="textPrimary">
+              {this.state.title} <span style={{fontSize: 12}}>ID: {this.state.id}</span>
+            </Typography>
             </Grid>
             <Grid style={{marginTop: 10}}>
               <Typography variant="h5" color="textSecondary"> Score: {this.state.score} </Typography>
@@ -78,6 +81,10 @@ class Conference extends React.Component {
             <Grid style={{margin: 10}} container justify="center">
               {topics}
             </Grid>
+            <div style={{ margin: 60, fontSize: 12 }}>
+              *To report discrepancies and updates to conference information, please submit an issue&nbsp;
+              <a target="_blank" rel="noopener noreferrer" href={updateConferenceIssueURL}>here</a>
+            </div>
             <Grid container spacing={1}>
               <ConferenceInfo pages={this.state.pages} />
             </Grid>
