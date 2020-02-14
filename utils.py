@@ -55,6 +55,7 @@ class Jsonifier:
 class SearchQueries:
 
     # Home
+    home_series = lambda  num: "SELECT id, title, score FROM Series ORDER BY score DESC LIMIT {}".format(num)
     home_confs = lambda min_year, max_year, num: "SELECT id, title, year, score FROM WikicfpConferences\
         WHERE year>={} and year<={} ORDER BY score DESC LIMIT {}".format(min_year, max_year, num)
     home_person_orgs = lambda num: "SELECT p.id, p.name, p.score, o.id, o.name FROM Persons p\

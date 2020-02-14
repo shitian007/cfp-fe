@@ -4,11 +4,6 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from utils import SearchQueries, Jsonifier
 
-# parser = argparse.ArgumentParser(description='')
-# parser.add_argument('db_filepath', type=str,
-#                     help="Specify database file to predict lines")
-# args = parser.parse_args()
-# db_filepath = args.db_filepath
 db_filepath = './cfp.db'
 
 app = Flask(__name__)
@@ -20,10 +15,12 @@ def home():
     with sqlite3.connect(db_filepath) as cnx:
         max_results = 30
         cur = cnx.cursor()
+        series = Jsonifier.id_name(cur.execute(SearchQueries.home_series(max_results)).fetchall(), 'series')
         confs = Jsonifier.conf_years(cur.execute(SearchQueries.home_confs(0, 2020, max_results)).fetchall())
         person_orgs = Jsonifier.person_org(cur.execute(SearchQueries.home_person_orgs(max_results)).fetchall())
         orgs = Jsonifier.id_name(cur.execute(SearchQueries.home_orgs(max_results)).fetchall(), 'org')
     return {
+        'series': series,
         'confs': confs,
         'persons': person_orgs,
         'orgs': orgs
@@ -77,6 +74,7 @@ def get_person():
         person_org = Jsonifier.id_name(cur.execute(SearchQueries.person_org(person_id)).fetchall(), 'org')
         person_confs = Jsonifier.person_confs(cur.execute(SearchQueries.person_confs(person_id)).fetchall())
     return {
+        'id': person_id,
         'name': person_name[0],
         'score': round(person_score[0], 2),
         'org': person_org[0] if person_org else "", # id_name processes for list
@@ -93,6 +91,7 @@ def get_org():
         org_score = cur.execute(SearchQueries.org_score(org_id)).fetchone()
         org_persons = Jsonifier.id_name(cur.execute(SearchQueries.org_persons(org_id)).fetchall(), 'person')
     return {
+        'id': org_id,
         'name': org_name,
         'score': round(org_score[0], 2),
         'persons': org_persons
