@@ -93,7 +93,9 @@ class SearchQueries:
     # Conference Lookup
     conf_title = lambda conf_id: "SELECT title FROM WikicfpConferences WHERE id={}".format(conf_id)
     conf_score = lambda conf_id: "SELECT score FROM WikicfpConferences WHERE id={}".format(conf_id)
-    conf_topics = lambda conf_id: "SELECT categories FROM WikicfpConferences WHERE id={}".format(conf_id)
+    conf_topics = lambda conf_id: "SELECT t.topic FROM WikicfpConferences wc\
+        JOIN ConferenceTopics ct ON wc.id=ct.conf_id\
+        JOIN Topics t ON ct.topic_id=t.id WHERE wc.id={}".format(conf_id)
     conf_pages = lambda conf_id: "SELECT url FROM ConferencePages WHERE conf_id={}".format(conf_id)
     conf_persons = lambda conf_id: "SELECT p.id, p.name, p.score, o.id, o.name, o.score, pr.role_type\
         FROM Persons p\

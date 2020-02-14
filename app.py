@@ -105,14 +105,14 @@ def get_conf():
         cur = cnx.cursor()
         conf_title = cur.execute(SearchQueries.conf_title(conf_id)).fetchone()
         conf_score = cur.execute(SearchQueries.conf_score(conf_id)).fetchone()
-        conf_topics = cur.execute(SearchQueries.conf_topics(conf_id)).fetchone()
+        conf_topics = cur.execute(SearchQueries.conf_topics(conf_id)).fetchall()
         conf_pages = cur.execute(SearchQueries.conf_pages(conf_id)).fetchall()
         conf_persons = cur.execute(SearchQueries.conf_persons(conf_id)).fetchall()
     return {
         'id': conf_id,
         'title': conf_title,
         'score': round(conf_score[0], 2),
-        'topics': eval(conf_topics[0]),
+        'topics': conf_topics,
         'pages': conf_pages,
         'persons': Jsonifier.conf_persons(conf_persons)
     }
