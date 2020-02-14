@@ -13,6 +13,7 @@ class Conference extends React.Component {
     this.state = {
       id: this.props.id,
       title: '',
+      topics: [],
       pages: [],
       persons: [],
       score: ''
@@ -55,12 +56,14 @@ class Conference extends React.Component {
 
   render() {
     let topics = []
-    if (this.state.topics) {
+    if (this.state.topics.length !== 0) {
       this.state.topics.forEach((row, index) => {
         topics.push(
           <Chip style={{marginRight: 20}} key={row} label={row}></Chip>
         )
       })
+    } else {
+      topics.push(<Typography color="textSecondary" key='no-topic'>No labelled topics</Typography>)
     }
     return (
       <div style={{ margin: 50 }}>
@@ -70,9 +73,9 @@ class Conference extends React.Component {
               <Typography variant="h5" color="textPrimary"> {this.state.title} </Typography>
             </Grid>
             <Grid style={{marginTop: 10}}>
-              <Typography variant="h4" color="textSecondary"> Score: {this.state.score} </Typography>
+              <Typography variant="h5" color="textSecondary"> Score: {this.state.score} </Typography>
             </Grid>
-            <Grid style={{ margin: 20, padding: 20 }} container justify="center">
+            <Grid style={{margin: 10}} container justify="center">
               {topics}
             </Grid>
             <Grid container spacing={1}>

@@ -9,11 +9,10 @@ import { Link, withRouter } from 'react-router-dom';
 import { backendIP } from './constants'
 
 const styles = theme => ({
-  title: {
-    fontSize: 30,
-  },
   grow: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#c6ecf4',
+
+
     borderRadius: 10
   },
   search: {
@@ -59,11 +58,11 @@ class SearchAppBar extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.grow}>
-        <Typography variant="h3">Mining Call for Papers</Typography>
+      <Grid className={classes.grow}>
+        <Typography variant="h4">Mining Call for Papers</Typography>
         <Grid container justify="center">
-          <Link to={'/home'} style={{margin: 5}}> Home </Link>
-          <Link to={'/about'} style={{margin: 5}}> About </Link>
+          <Link to={'/home'} style={{ marginRight: 20 }}> Home </Link>
+          <Link to={'/about'}> About </Link>
         </Grid>
         <Autocomplete
           onKeyPress={(e) => {
@@ -98,7 +97,7 @@ class SearchAppBar extends React.Component {
             );
           }}
         />
-      </div>
+      </Grid>
     );
   }
 }

@@ -75,16 +75,16 @@ class Home extends React.Component {
       <div style={{ margin: 100, marginTop: 20 }}>
         <Grid container justify="center">
           <Grid container justify="center">
-            <Paper square style={{ width: 480 }}>
+            <Paper square style={{ width: 490 }}>
               <Tabs
                 value={this.state.tabDisplayIndex}
                 indicatorColor="primary"
                 textColor="primary"
                 onChange={this.handleChange}
               >
-                <Tab label="Conferences" />
-                <Tab label="Persons" />
-                <Tab label="Organizations" />
+                <Tab label="Top Conferences" />
+                <Tab label="Top Contributors" />
+                <Tab label="Top Organizations" />
               </Tabs>
             </Paper>
           </Grid>
