@@ -5,7 +5,7 @@ class Jsonifier:
             'type': result_type,
             'id': result[0],
             'text': result[1],
-            'score': result[2]
+            'score': round(result[2], 2)
             } for result in results]
 
     @staticmethod
@@ -14,7 +14,7 @@ class Jsonifier:
             'id': conf[0],
             'title': conf[1],
             'year': conf[2],
-            'score': conf[3]
+            'score': round(conf[3], 2)
         } for conf in confs]
 
     @staticmethod
@@ -23,7 +23,7 @@ class Jsonifier:
             'type': 'person',
             'id': po[0],
             'name': po[1],
-            'score': po[2],
+            'score': round(po[2], 2),
             'org_id': po[3],
             'org': po[4],
         } for po in person_orgs]
@@ -34,12 +34,12 @@ class Jsonifier:
             'type': 'person',
             'id': person[0],
             'name': person[1],
-            'score': person[2],
+            'score': round(person[2], 2),
             'org_id': person[3],
             'org': person[4],
-            'org_score': person[5],
+            'org_score': round(person[5], 2),
             'role': person[6]
-            } for person in persons]
+        } for person in persons]
 
     @staticmethod
     def person_confs(confs):
@@ -48,7 +48,7 @@ class Jsonifier:
             'role': conf[0],
             'id': conf[1],
             'title': conf[2],
-            'score': conf[3]
+            'score': round(conf[3], 2)
         } for conf in confs]
 
 

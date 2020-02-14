@@ -78,7 +78,7 @@ def get_person():
         person_confs = Jsonifier.person_confs(cur.execute(SearchQueries.person_confs(person_id)).fetchall())
     return {
         'name': person_name[0],
-        'score': person_score[0],
+        'score': round(person_score[0], 2),
         'org': person_org[0] if person_org else "", # id_name processes for list
         'conferences': person_confs
     }
@@ -94,7 +94,7 @@ def get_org():
         org_persons = Jsonifier.id_name(cur.execute(SearchQueries.org_persons(org_id)).fetchall(), 'person')
     return {
         'name': org_name,
-        'score': org_score,
+        'score': round(org_score[0], 2),
         'persons': org_persons
     }
 
@@ -112,7 +112,7 @@ def get_conf():
     return {
         'id': conf_id,
         'title': conf_title,
-        'score': conf_score,
+        'score': round(conf_score[0], 2),
         'topics': eval(conf_topics[0]),
         'pages': conf_pages,
         'persons': Jsonifier.conf_persons(conf_persons)
