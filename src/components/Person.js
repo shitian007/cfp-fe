@@ -6,7 +6,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import { Typography, Box } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
-import { backendIP, personIssueURL } from './constants'
+import { backendIP, personIssueURL, googleScholarBaseURL, aminerBaseURL, orcidBaseURL } from './constants'
 import _ from 'lodash';
 
 class Person extends React.Component {
@@ -48,6 +48,7 @@ class Person extends React.Component {
             name: responseJson.name,
             org_id: responseJson.org.id,
             org: responseJson.org.text,
+            external_ids: responseJson.external_ids,
             confs: responseJson.conferences
           });
           this.props.setLoadingState(false);
@@ -58,6 +59,24 @@ class Person extends React.Component {
   render() {
 
     let confs = _.sortBy(this.state.confs, c => c.score).reverse();
+    let gscholar_link = '-';
+    let orcid_link = '-';
+    let dblp_link = '-';
+    let aminer_link = '-';
+    if (this.state.external_ids) {
+      if (this.state.external_ids.gscholar_id) {
+        gscholar_link = <a target="_blank" rel="noopener noreferrer" href={googleScholarBaseURL + this.state.external_ids.gscholar_id}>link</a>
+      }
+      if (this.state.external_ids.orcid) {
+        orcid_link = <a target="_blank" rel="noopener noreferrer" href={orcidBaseURL + this.state.external_ids.orcid}>link</a>
+      }
+      if (this.state.external_ids.dblp_id) {
+        dblp_link = <a target="_blank" rel="noopener noreferrer" href={this.state.external_ids.dblp_id}>link</a>
+      }
+      if (this.state.external_ids.aminer_id) {
+        aminer_link = <a target="_blank" rel="noopener noreferrer" href={aminerBaseURL + this.state.external_ids.aminer_id}>link</a>
+      }
+    }
 
     return (
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
@@ -73,30 +92,22 @@ class Person extends React.Component {
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={gscholar_icon} alt="google scholar" />
               &nbsp;Google Scholar:&nbsp;
-              <a target="_black" rel="noopener noreferrer" href={"https://www.google.com"}>
-                {"In progress"}
-              </a>
+              {gscholar_link}
             </Box>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={orcid_icon} alt="orcid" />
               &nbsp;orcID:&nbsp;
-              <a target="_black" rel="noopener noreferrer" href={"https://www.orcid.org"}>
-                {"In progress"}
-              </a>
+              {orcid_link}
             </Box>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={dblp_icon} alt="dblp" />
               &nbsp;dblp:&nbsp;
-              <a target="_black" rel="noopener noreferrer" href={"https://dblp.uni-trier.de/"}>
-                {"In progress"}
-              </a>
+              {dblp_link}
             </Box>
             <Box style={{ margin: 10 }}>
               <img style={{ height: 20 }} src={aminer_icon} alt="aminer" />
               &nbsp;Aminer:&nbsp;
-              <a target="_black" rel="noopener noreferrer" href={"https://www.aminer.cn"}>
-                {"In progress"}
-              </a>
+              {aminer_link}
             </Box>
             <div style={{ margin: 60, fontSize: 12 }}>
               *To report discrepancies and updates to researcher information, please submit an issue&nbsp;

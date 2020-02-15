@@ -51,6 +51,15 @@ class Jsonifier:
             'score': round(conf[3], 2)
         } for conf in confs]
 
+    @staticmethod
+    def external_ids(ids):
+        return {
+            'gscholar_id': ids[0],
+            'orcid': ids[1],
+            'dblp_id': ids[2],
+            'aminer_id': ids[3],
+        }
+
 
 class SearchQueries:
 
