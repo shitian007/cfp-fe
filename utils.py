@@ -87,6 +87,7 @@ class SearchQueries:
     person_org = lambda person_id: "SELECT o.id, o.name, o.score\
         FROM Persons p\
         JOIN Organizations o ON p.org_id=o.id WHERE p.id={}".format(person_id)
+    person_external_ids = lambda person_id: "SELECT gscholar_id, orcid, dblp_id, aminer_id FROM Persons WHERE id={}".format(person_id)
     person_confs = lambda person_id: "SELECT pr.role_type, wc.id, wc.title, wc.score\
         FROM Persons p\
         JOIN PersonRole pr ON pr.person_id=p.id\
@@ -111,3 +112,10 @@ class SearchQueries:
         JOIN PersonRole pr ON p.id=pr.person_id\
         LEFT JOIN Organizations o ON o.id=p.org_id\
         WHERE pr.conf_id={} ORDER BY p.id;".format(conf_id)
+
+    # Series Popover
+    conf_series = lambda conf_id: "SELECT s.title FROM WikicfpConferences wc\
+        JOIN Series s ON wc.series_id=s.id WHERE wc.id={}".format(conf_id)
+    sister_confs = lambda conf_id: "SELECT wc.id, wc.title, wc.score FROM WikicfpConferences wc\
+                    WHERE wc.series_id=(SELECT series_id FROM WikicfpConferences WHERE id={})\
+                    AND wc.id!={}".format(conf_id, conf_id)

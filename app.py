@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from utils import SearchQueries, Jsonifier
 
-db_filepath = './cfp.db'
+db_filepath = './cfp_eid_nd.db'
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -72,12 +72,14 @@ def get_person():
         person_name = cur.execute(SearchQueries.person_name(person_id)).fetchone()
         person_score = cur.execute(SearchQueries.person_score(person_id)).fetchone()
         person_org = Jsonifier.id_name(cur.execute(SearchQueries.person_org(person_id)).fetchall(), 'org')
+        person_external_ids = Jsonifier.external_ids(cur.execute(SearchQueries.person_external_ids(person_id)).fetchone())
         person_confs = Jsonifier.person_confs(cur.execute(SearchQueries.person_confs(person_id)).fetchall())
     return {
         'id': person_id,
         'name': person_name[0],
         'score': round(person_score[0], 2),
         'org': person_org[0] if person_org else "", # id_name processes for list
+        'external_ids': person_external_ids,
         'conferences': person_confs
     }
 
@@ -108,13 +110,17 @@ def get_conf():
         conf_topics = cur.execute(SearchQueries.conf_topics(conf_id)).fetchall()
         conf_pages = cur.execute(SearchQueries.conf_pages(conf_id)).fetchall()
         conf_persons = cur.execute(SearchQueries.conf_persons(conf_id)).fetchall()
+        conf_series = cur.execute(SearchQueries.conf_series(conf_id)).fetchone()
+        sister_confs = Jsonifier.id_name(cur.execute(SearchQueries.sister_confs(conf_id)).fetchall(), 'conf')
     return {
         'id': conf_id,
         'title': conf_title,
         'score': round(conf_score[0], 2),
         'topics': conf_topics,
         'pages': conf_pages,
-        'persons': Jsonifier.conf_persons(conf_persons)
+        'persons': Jsonifier.conf_persons(conf_persons),
+        'series': conf_series,
+        'sister_confs': sister_confs
     }
 
-app.run()
+app.run(debug=True)
