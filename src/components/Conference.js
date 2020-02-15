@@ -1,10 +1,11 @@
+import _ from 'lodash';
 import React from 'react';
 import { TableContainer, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { Grid, Typography, Chip } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
-import { backendIP, updateConferenceIssueURL } from './constants'
-import _ from 'lodash';
+import { backendIP, updateConferenceIssueURL } from './constants';
+import SeriesPopover from './SeriesPopover';
 
 class Conference extends React.Component {
   constructor(props) {
@@ -16,7 +17,9 @@ class Conference extends React.Component {
       topics: [],
       pages: [],
       persons: [],
-      score: ''
+      score: '',
+      series: '',
+      sister_confs: []
     }
     this.getConferenceInfo();
   }
@@ -48,7 +51,9 @@ class Conference extends React.Component {
             topics: responseJson.topics,
             pages: responseJson.pages,
             persons: responseJson.persons,
-            score: responseJson.score
+            score: responseJson.score,
+            series: responseJson.series,
+            sister_confs: responseJson.sister_confs
           });
           this.props.setLoadingState(false);
         }
@@ -60,7 +65,7 @@ class Conference extends React.Component {
     if (this.state.topics.length !== 0) {
       this.state.topics.forEach((row, index) => {
         topics.push(
-          <Chip style={{marginRight: 20}} key={row} label={row}></Chip>
+          <Chip style={{ marginRight: 20 }} key={row} label={row}></Chip>
         )
       })
     } else {
@@ -70,15 +75,18 @@ class Conference extends React.Component {
       <div style={{ margin: 50 }}>
         <Grid container spacing={3}>
           <Grid item xs>
-            <Grid container spacing={1}>
-            <Typography variant="h5" color="textPrimary">
-              {this.state.title} <span style={{fontSize: 12}}>ID: {this.state.id}</span>
-            </Typography>
+            <Grid container justify="center" style={{marginBottom: 10}}>
+              <SeriesPopover seriesTitle={this.state.series} conferences={this.state.sister_confs}/>
             </Grid>
-            <Grid style={{marginTop: 10}}>
+            <Grid container spacing={1} justify="center">
+              <Typography variant="h5" color="textPrimary">
+                {this.state.title} <span style={{ fontSize: 12 }}>ID: {this.state.id}</span>
+              </Typography>
+            </Grid>
+            <Grid style={{ marginTop: 10 }}>
               <Typography variant="h5" color="textSecondary"> Score: {this.state.score} </Typography>
             </Grid>
-            <Grid style={{margin: 10}} container justify="center">
+            <Grid style={{ margin: 10 }} container justify="center">
               {topics}
             </Grid>
             <div style={{ margin: 60, fontSize: 12 }}>
