@@ -163,7 +163,11 @@ class TopConferences extends React.Component {
       }));
       tableContent = this.props.series.map(series => (
         <TableRow key={series.id} align="left">
-          <TableCell> {series.text} </TableCell>
+          <TableCell>
+            <Link to={'/conf/' + series.conf_id}>
+             {series.title}
+            </Link>
+          </TableCell>
           <TableCell> {series.score} </TableCell>
         </TableRow>
       ));

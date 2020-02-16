@@ -37,7 +37,7 @@ const SeriesPopover = ({ seriesTitle, conferences }) => {
         <Grid style={{margin: 20}}>
           <Typography variant="body1" color="textSecondary">Other Iterations</Typography>
           {conferences.map(conf => (
-            <div key={conf.id}>
+            <div style={{margin: 5}} key={conf.id}>
               <Link to={'/conf/' + conf.id} onClick={handleClose}>
                 {conf.text}
               </Link>
