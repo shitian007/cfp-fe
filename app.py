@@ -15,7 +15,7 @@ def home():
     with sqlite3.connect(db_filepath) as cnx:
         max_results = 30
         cur = cnx.cursor()
-        series = Jsonifier.id_name(cur.execute(SearchQueries.home_series(max_results)).fetchall(), 'series')
+        series = Jsonifier.home_series(cur.execute(SearchQueries.home_series(max_results)).fetchall())
         confs = Jsonifier.conf_years(cur.execute(SearchQueries.home_confs(0, 2020, max_results)).fetchall())
         person_orgs = Jsonifier.person_org(cur.execute(SearchQueries.home_person_orgs(max_results)).fetchall())
         orgs = Jsonifier.id_name(cur.execute(SearchQueries.home_orgs(max_results)).fetchall(), 'org')
