@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
-import { Button, Paper, Tabs, Tab } from '@material-ui/core';
+import { ButtonGroup, Button, Paper, Tabs, Tab } from '@material-ui/core';
 import { Grid, Box } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP, personIssueURL, newConferenceIssueURL, updateConferenceIssueURL } from './constants';
@@ -103,8 +103,8 @@ class Home extends React.Component {
             <a target="_blank" rel="noopener noreferrer" href="https://github.com/shitian007/cfp-mining">cfp-mining</a>&nbsp;
             and the code for website at&nbsp;
             <a target="_blank" rel="noopener noreferrer" href="https://github.com/shitian007/cfp-fe">cfp-fe</a>.
-            PRs, comments and suggestions are highly welcome.<br/>
-            <Grid style={{marginTop: 10}} container>
+            PRs, comments and suggestions are highly welcome.<br />
+            <Grid style={{ marginTop: 10 }} container>
               <u>For lapses or inaccuracy of any data, please request for corresponding updates as follows:</u>
               <div>
                 <b>To ADD or UPDATE Person information: </b> please submit a new issue&nbsp;
@@ -132,72 +132,113 @@ class TopConferences extends React.Component {
     super(props);
     this.state = {
       displayBySeries: false,
-      displayByIteration: true
+      displayByIteration: true,
+      headers: [],
+      tableContent: [],
+      seriesLetter: '',
+      series: this.props.series
     }
   }
 
+  componentDidMount() {
+    this.setDisplayBy('iteration');
+  }
+
   setDisplayBy = (displayByType) => {
+    if (displayByType === 'iteration') {
+      this.setState({
+        headers: ['Conference Iteration', 'Year', 'Score'].map(headerName => {
+          return <TableCell key={headerName} align="left">{headerName}</TableCell>
+        }),
+        tableContent: this.props.confs.map(conf => (
+          <TableRow key={conf.id} align="left">
+            <TableCell> <Link to={'/conf/' + conf.id}> {conf.title} </Link> </TableCell>
+            <TableCell> {conf.year} </TableCell>
+            <TableCell> {conf.score} </TableCell>
+          </TableRow>
+        ))
+      });
+    } else {
+      this.setState({
+        headers: ['Conference Series', 'Score'].map(headerName => {
+          return <TableCell key={headerName} align="left">{headerName}</TableCell>
+        }),
+        tableContent: this.state.series.map(series => (
+          <TableRow key={series.id} align="left">
+            <TableCell>
+              <Link to={'/conf/' + series.conf_id}>
+                {series.title}
+              </Link>
+            </TableCell>
+            <TableCell> {series.score} </TableCell>
+          </TableRow>
+        ))
+      });
+    }
     this.setState({
       displayBySeries: displayByType === 'series',
       displayByIteration: displayByType === 'iteration',
     });
   }
 
+  selectSeriesLetter = (letter) => {
+    let fetch_url = backendIP + 'series?letter=' + letter;
+    fetch(fetch_url, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          seriesLetter: letter,
+          series: responseJson.series
+        });
+        this.setDisplayBy('series');
+      });
+  }
+
   render() {
-    let headers = []
-    let tableContent = []
-    if (this.state.displayByIteration) {
-      headers.push(['Conference Iteration', 'Year', 'Score'].map(headerName => {
-        return <TableCell key={headerName} align="left">{headerName}</TableCell>
-      }));
-      tableContent = this.props.confs.map(conf => (
-        <TableRow key={conf.id} align="left">
-          <TableCell> <Link to={'/conf/' + conf.id}> {conf.title} </Link> </TableCell>
-          <TableCell> {conf.year} </TableCell>
-          <TableCell> {conf.score} </TableCell>
-        </TableRow>
-      ))
-    } else {
-      headers.push(['Conference Series', 'Score'].map(headerName => {
-        return <TableCell key={headerName} align="left">{headerName}</TableCell>
-      }));
-      tableContent = this.props.series.map(series => (
-        <TableRow key={series.id} align="left">
-          <TableCell>
-            <Link to={'/conf/' + series.conf_id}>
-             {series.title}
-            </Link>
-          </TableCell>
-          <TableCell> {series.score} </TableCell>
-        </TableRow>
-      ));
-    }
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    let seriesButtonGroup = this.state.displayBySeries ?
+      <ButtonGroup style={{ marginBottom: 10 }} aria-label="text primary small group">
+        {letters.map(letter => (
+          <Button
+            disabled={this.state.seriesLetter === letter}
+            key={letter}
+            style={{ minWidth: 8, width: 8 }}
+            onClick={() => this.selectSeriesLetter(letter)}
+          >
+            {letter}
+          </Button>
+        ))}
+      </ButtonGroup>
+      : undefined
 
     return (
       <Grid item>
         <Button
-          onClick={() => this.setDisplayBy('iteration')}
+          onClick={() => this.setDisplayBy("iteration")}
           size="small" variant="outlined" color="primary"
           disabled={this.state.displayByIteration}
-          style={{margin: 10}} >
-          By Iteration
+          style={{ margin: 10 }} >
+          By Iteration (Ranked)
         </Button>
         <Button
-          onClick={() => this.setDisplayBy('series')}
+          onClick={() => this.setDisplayBy("series")}
           size="small" variant="outlined" color="primary"
           disabled={this.state.displayBySeries}
-          style={{margin: 10}} >
-          By Series
+          style={{ margin: 10 }} >
+          Browse By Series (Please Ignore Current Scores)
         </Button>
-        <Grid container justify="space-between">
+        {seriesButtonGroup}
+        <Grid container justify="center">
           <Table size='small'>
             <TableHead>
               <TableRow style={{ background: 'lightgrey' }}>
-                {headers}
+                {this.state.headers}
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableContent}
+              {this.state.tableContent}
             </TableBody>
           </Table>
         </Grid>

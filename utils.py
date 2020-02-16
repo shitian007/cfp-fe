@@ -65,7 +65,7 @@ class Jsonifier:
     @staticmethod
     def home_series(series):
         # Sort by (score, year) to facilitate filtering of duplicates by id, keeping most current
-        series = sorted(series, key=lambda s: (s[2], s[4]) , reverse=True)
+        series = sorted(series, key=lambda s: (s[2], [4]) , reverse=True)
         series = [next(s) for _, s in itertools.groupby(series, lambda s: s[0])]
         return [{
             'id': s[0],
@@ -83,6 +83,9 @@ class SearchQueries:
     home_series = lambda num: "SELECT s.id, s.title, s.score, wc.id, wc.year FROM (SELECT id, title, score FROM Series s\
                             ORDER BY score DESC LIMIT {}) s\
                             LEFT JOIN WikicfpConferences wc ON wc.series_id=s.id".format(num)
+    series_by_letter = lambda letter: "SELECT s.id, s.title, s.score, wc.id, wc.year FROM\
+                                (SELECT id, title, score FROM Series WHERE title LIKE \'{}%\') s\
+                                LEFT JOIN WikicfpConferences wc ON s.id=wc.series_id".format(letter)
     home_confs = lambda min_year, max_year, num: "SELECT id, title, year, score FROM WikicfpConferences\
         WHERE year>={} and year<={} ORDER BY score DESC LIMIT {}".format(min_year, max_year, num)
     home_person_orgs = lambda num: "SELECT p.id, p.name, p.score, o.id, o.name FROM Persons p\

@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from utils import SearchQueries, Jsonifier
 
-db_filepath = './cfp_eid_nd.db'
+db_filepath = './cfp.db'
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -24,6 +24,17 @@ def home():
         'confs': confs,
         'persons': person_orgs,
         'orgs': orgs
+    }
+
+@app.route('/series')
+@cross_origin()
+def series():
+    letter = request.args.get('letter')
+    with sqlite3.connect(db_filepath) as cnx:
+        cur = cnx.cursor()
+        series = Jsonifier.home_series(cur.execute(SearchQueries.series_by_letter(letter)))
+    return {
+        'series': series
     }
 
 @app.route('/autocomplete_search')
