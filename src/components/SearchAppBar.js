@@ -84,7 +84,7 @@ class SearchAppBar extends React.Component {
             <TextField
               className={classes.search}
               {...params}
-              label="Search"
+              label="Search Conferences / Researchers / Organizations"
               variant="outlined"
             />
           )}
