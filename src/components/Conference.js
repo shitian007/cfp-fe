@@ -6,6 +6,7 @@ import { Grid, Typography, Chip } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP, updateConferenceIssueURL } from './constants';
 import SeriesPopover from './SeriesPopover';
+import { urlInfo } from './utils';
 
 class Conference extends React.Component {
   constructor(props) {
@@ -38,26 +39,29 @@ class Conference extends React.Component {
   }
 
   getConferenceInfo = () => {
-    let fetch_url = backendIP + 'conf?id=' + this.props.match.params.id;
-    fetch(fetch_url, {
-      method: 'GET',
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (this.mounted) {
-          this.setState({
-            id: responseJson.id,
-            title: responseJson.title,
-            topics: responseJson.topics,
-            pages: responseJson.pages,
-            persons: responseJson.persons,
-            score: responseJson.score,
-            series: responseJson.series,
-            sister_confs: responseJson.sister_confs
-          });
-          this.props.setLoadingState(false);
-        }
-      });
+    let [fetch_type, fetch_id] = urlInfo(window.location.href);
+    let fetch_url = backendIP + 'conf?id=' + fetch_id;
+    if (fetch_type === "conf") {
+      fetch(fetch_url, {
+        method: 'GET',
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (this.mounted) {
+            this.setState({
+              id: responseJson.id,
+              title: responseJson.title,
+              topics: responseJson.topics,
+              pages: responseJson.pages,
+              persons: responseJson.persons,
+              score: responseJson.score,
+              series: responseJson.series,
+              sister_confs: responseJson.sister_confs
+            });
+            this.props.setLoadingState(false);
+          }
+        });
+    }
   }
 
   render() {
@@ -75,8 +79,8 @@ class Conference extends React.Component {
       <div style={{ margin: 50 }}>
         <Grid container spacing={3}>
           <Grid item xs>
-            <Grid container justify="center" style={{marginBottom: 10}}>
-              <SeriesPopover seriesTitle={this.state.series} conferences={this.state.sister_confs}/>
+            <Grid container justify="center" style={{ marginBottom: 10 }}>
+              <SeriesPopover seriesTitle={this.state.series} conferences={this.state.sister_confs} />
             </Grid>
             <Grid container spacing={1} justify="center">
               <Typography variant="h5" color="textPrimary">

@@ -29,7 +29,8 @@ class SearchPage extends React.Component {
   }
 
   getResults = () => {
-    let fetch_url = backendIP + 'search?search_val=' + this.props.match.params.searchVal;
+    let fetch_id = window.location.href.split("/").slice(-1).pop();
+    let fetch_url = backendIP + 'search?search_val=' + fetch_id;
     fetch(fetch_url, {
       method: 'GET'
     })

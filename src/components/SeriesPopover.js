@@ -44,7 +44,6 @@ const SeriesPopover = ({ seriesTitle, conferences }) => {
             </div>
           ))
           }
-          <div style={{fontSize: 12}}>*Please double-click links*</div>
         </Grid>
 
       </Popover>
