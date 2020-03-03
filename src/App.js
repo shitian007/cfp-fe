@@ -48,7 +48,7 @@ class Base extends React.Component {
 
   render() {
     return (
-      <div style={{ margin: 10 }}>
+      <div>
         <SearchAppBar
           search={this.search}
         />
@@ -59,7 +59,8 @@ class Base extends React.Component {
         >
           <CircularProgress size={40} />
         </Box>
-        <Box visibility={this.state.loading ? "hidden" : "visible"}>
+        <Box
+          visibility={this.state.loading ? "hidden" : "visible"}>
           <Switch>
             <Route path='/(home|)' exact render={(props) =>
               <Home setLoadingState={this.setLoadingState} />

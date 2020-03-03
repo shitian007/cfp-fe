@@ -4,20 +4,18 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Typography from '@material-ui/core/Typography';
-import { Grid } from '@material-ui/core';
+import { Button, Grid, Box } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP } from './constants'
 
 const styles = theme => ({
-  grow: {
-    backgroundColor: '#c6ecf4',
-
-
-    borderRadius: 10
+  mainGrid: {
+    // backgroundColor: '#c6ecf4',
+    background: 'linear-gradient(to right bottom, white, lightblue)',
+    padding: 10
   },
   search: {
-    width: 800,
-    margin: 10,
+    minWidth: 800,
   },
   optionType: {
     float: 'right'
@@ -58,45 +56,52 @@ class SearchAppBar extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid className={classes.grow}>
-        <Typography variant="h4">Mining Call for Papers</Typography>
-        <Grid container justify="center">
-          <Link to={'/home'} style={{ marginRight: 20 }}> Home </Link>
-          <Link to={'/about'}> About </Link>
+      <Grid container className={classes.mainGrid}>
+        <Grid item sm style={{ maxWidth: 400 }}>
+          <Box item style={{ display: 'flex', alignItems: 'center' }}>
+            <Link to={'/home'}> <Button style={{ maxWidth: 150 }}> CFP-Mining Home </Button> </Link>
+            <Link to={'/about'}> <Button> About </Button> </Link>
+            <Link to={'/about'}> <Button> FAQ </Button> </Link>
+          </Box>
         </Grid>
-        <Autocomplete
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              this.props.search(this.state.searchVal);
-            }
-          }
-          }
-          getOptionLabel={
-            (option) => {
-              return (typeof option === "string") ? option : option.text;
-            }
-          }
-          onInputChange={this.onTextChange}
-          options={this.state.searchResults}
-          autoComplete
-          freeSolo
-          renderInput={params => (
-            <TextField
-              className={classes.search}
-              {...params}
-              label="Search Conferences / Researchers / Organizations"
-              variant="outlined"
+        <Grid item sm>
+          <Grid container>
+            <Autocomplete
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  this.props.search(this.state.searchVal);
+                }
+              }
+              }
+              getOptionLabel={
+                (option) => {
+                  return (typeof option === "string") ? option : option.text;
+                }
+              }
+              onInputChange={this.onTextChange}
+              options={this.state.searchResults}
+              autoComplete
+              freeSolo
+              renderInput={params => (
+                <TextField
+                  className={classes.search}
+                  {...params}
+                  label="Search Conferences / Researchers / Organizations"
+                  variant="outlined"
+                />
+              )}
+              renderOption={option => {
+                return (
+                  <Grid container justify="space-between">
+                    <Typography variant="body2" align="left">{option.text}</Typography>
+                    <Typography variant="body2" color="textSecondary" align="right">{option.type}</Typography>
+                  </Grid>
+                );
+              }}
             />
-          )}
-          renderOption={option => {
-            return (
-              <Grid container justify="space-between">
-                <Typography variant="body2" align="left">{option.text}</Typography>
-                <Typography variant="body2" color="textSecondary" align="right">{option.type}</Typography>
-              </Grid>
-            );
-          }}
-        />
+
+          </Grid>
+        </Grid>
       </Grid>
     );
   }

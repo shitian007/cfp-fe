@@ -74,7 +74,7 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div style={{ margin: 100, marginTop: 20 }}>
+      <div style={{ marginTop: 20 }}>
         <Grid container justify="center">
           <Grid container justify="center">
             <Paper square style={{ width: 490 }}>
@@ -94,7 +94,8 @@ class Home extends React.Component {
             {this.state.tabDisplay}
           </Grid>
         </Grid>
-        <Grid container justify="center">
+        <Grid style={{ background: 'lightgrey' }}
+          container justify="center">
           <Box align="left" style={{ margin: 20, width: 800, fontSize: 14 }}>
             <div> <b>NOTE</b> </div>
             Most data on CFP-Mining is mined from individual conference call-for-papers and the accuracy and completeness of the
