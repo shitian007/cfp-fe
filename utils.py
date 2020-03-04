@@ -50,7 +50,8 @@ class Jsonifier:
             'role': conf[0],
             'id': conf[1],
             'title': conf[2],
-            'score': round(conf[3], 2)
+            'year': conf[3],
+            'score': round(conf[4], 2)
         } for conf in confs]
 
     @staticmethod
@@ -109,7 +110,7 @@ class SearchQueries:
         FROM Persons p\
         JOIN Organizations o ON p.org_id=o.id WHERE p.id={}".format(person_id)
     person_external_ids = lambda person_id: "SELECT gscholar_id, orcid, dblp_id, aminer_id FROM Persons WHERE id={}".format(person_id)
-    person_confs = lambda person_id: "SELECT pr.role_type, wc.id, wc.title, wc.score\
+    person_confs = lambda person_id: "SELECT pr.role_type, wc.id, wc.title, wc.year, wc.score\
         FROM Persons p\
         JOIN PersonRole pr ON pr.person_id=p.id\
         JOIN WikicfpConferences wc ON pr.conf_id=wc.id WHERE p.id={}".format(person_id)

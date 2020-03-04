@@ -7,6 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/c
 import { Typography, Box } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
 import { backendIP, personIssueURL, googleScholarBaseURL, aminerBaseURL, orcidBaseURL } from './constants'
+import '../../node_modules/react-vis/dist/style.css';
+import { XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineSeries } from 'react-vis';
 import _ from 'lodash';
 
 class Person extends React.Component {
@@ -82,7 +84,7 @@ class Person extends React.Component {
       <div style={{ marginTop: 30, display: 'flex', justifyContent: 'center' }}>
         <div>
           <Typography variant="h5" color="textPrimary">
-            {this.state.name} <span style={{fontSize: 12}}>ID: {this.state.id}</span>
+            {this.state.name} <span style={{ fontSize: 12 }}>ID: {this.state.id}</span>
           </Typography>
           <Typography variant="h5" color="textSecondary"> Score: {this.state.score} </Typography>
           <Link to={'/org/' + this.state.org_id}>
@@ -112,6 +114,9 @@ class Person extends React.Component {
             <div style={{ margin: 60, fontSize: 12 }}>
               *To report discrepancies and updates to researcher information, please submit an issue&nbsp;
               <a target="_blank" rel="noopener noreferrer" href={personIssueURL}>here</a>
+            </div>
+            <div>
+              <Visualizer conferences={confs}></Visualizer>
             </div>
           </div>
         </div>
@@ -149,6 +154,39 @@ class Person extends React.Component {
         </Table>
       </div>
     );
+  }
+}
+
+class Visualizer extends React.Component {
+  render() {
+    let confDict = {}
+    this.props.conferences.forEach((conf) => {
+      if (confDict[conf.year] == undefined) {
+        confDict[conf.year] = 1;
+      } else {
+        confDict[conf.year] = confDict[conf.year] + 1;
+      }
+    });
+    let dataArr = []
+    for (let [key, value] of Object.entries(confDict)) {
+      dataArr.push({ x: key, y: value });
+    }
+    console.log([...new Set(this.props.conferences.map(item => item.title))]);
+
+    return (
+      <XYPlot
+        xType="ordinal"
+        width={600}
+        height={300}>
+        <VerticalGridLines />
+        <HorizontalGridLines />
+        <XAxis title="Year" />
+        <YAxis title="Service" />
+        <LineSeries
+          data={dataArr}
+          style={{ stroke: 'blue', strokeWidth: 3 }} />
+      </XYPlot>
+    )
   }
 }
 

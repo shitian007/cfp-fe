@@ -10,7 +10,6 @@ import { backendIP } from './constants'
 
 const styles = theme => ({
   mainGrid: {
-    // backgroundColor: '#c6ecf4',
     background: 'linear-gradient(to right bottom, white, lightblue)',
     padding: 10
   },
@@ -58,7 +57,7 @@ class SearchAppBar extends React.Component {
     return (
       <Grid container className={classes.mainGrid}>
         <Grid item sm style={{ maxWidth: 400 }}>
-          <Box item style={{ display: 'flex', alignItems: 'center' }}>
+          <Box style={{ display: 'flex', alignItems: 'center' }}>
             <Link to={'/home'}> <Button style={{ maxWidth: 150 }}> CFP-Mining Home </Button> </Link>
             <Link to={'/about'}> <Button> About </Button> </Link>
             <Link to={'/about'}> <Button> FAQ </Button> </Link>
