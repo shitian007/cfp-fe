@@ -1,9 +1,10 @@
-import _ from 'lodash';
 import React from 'react';
-import { TableContainer, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
+import { Table, TableBody, TableCell, TableRow } from '@material-ui/core';
+import MUIDataTable from "mui-datatables";
 import { Grid, Typography, Chip } from '@material-ui/core';
-import { Link, withRouter } from 'react-router-dom';
+import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { withRouter } from 'react-router-dom';
 import { backendIP, updateConferenceIssueURL } from './constants';
 import SeriesPopover from './SeriesPopover';
 import { urlInfo } from './utils';
@@ -114,71 +115,145 @@ class Conference extends React.Component {
   }
 }
 
-class ConferencePersons extends React.Component {
-  render() {
-    let persons = _.sortBy(this.props.persons, p => p.score).reverse();
-
-    return (
-      <TableContainer style={{ marginRight: 50 }} component={Paper}>
-        <Table size="small">
-          <TableHead>
-            <TableRow style={{ background: 'lightgrey' }}>
-              <TableCell align="right">Person&nbsp;[Score]</TableCell>
-              <TableCell align="right">Organization&nbsp;[Score]</TableCell>
-              <TableCell align="right">Role&nbsp;</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {persons.map(person => (
-              <TableRow key={person.role + person.id}>
-                <TableCell align="right">
-                  <Link to={'/person/' + person.id}>
-                    {person.name}
-                  </Link>
-                  &nbsp;[{person.score}]
-                </TableCell>
-                <TableCell align="right">
-                  <Link to={'/org/' + person.org_id}>
-                    {person.org}
-                  </Link>
-                  &nbsp;[{person.org_score}]
-                </TableCell>
-                <TableCell align="right">{person.role}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    )
-  }
-}
-
 class ConferenceInfo extends React.Component {
   render() {
     return (
-      <Table size="small">
-        <TableHead>
-          <TableRow align="left">
-            <TableCell>
-              <Typography>
-                Relevant URLs
-                    </Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {this.props.pages.map(row => (
-            <TableRow key={row[0]}>
-              <TableCell>
-                <a target="_blank" rel="noopener noreferrer" href={row[0]}>
-                  {row[0]}
-                </a>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <ExpansionPanel style={{ width: "100%" }}>
+        <ExpansionPanelSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Relevant URLs</Typography>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <Table size="small">
+            <TableBody>
+              {this.props.pages.map(row => (
+                <TableRow key={row[0]}>
+                  <TableCell>
+                    <a target="_blank" rel="noopener noreferrer" href={row[0]}>
+                      {row[0]}
+                    </a>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     )
   }
 }
 export default withRouter(Conference);
+
+class ConferencePersons extends React.Component {
+  // Customize filter options
+  // Allow sorting by score
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "Service Members",
+      columns: ["Name", "Organization", "Role"],
+      options: {
+        onCellClick: (colData) => {
+          console.log(colData);
+        },
+        filter: false,
+        filterType: 'checkbox',
+      }
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps() {
+    let personData = this.props.persons.map((p) => {
+      let modifiedPerson = p;
+      modifiedPerson.Name = p.name;
+      modifiedPerson.Organization = p.org;
+      modifiedPerson.Role = p.role;
+      return modifiedPerson
+    });
+    this.setState({
+      data: personData
+    });
+  }
+
+  render() {
+    console.log(this.state.data);
+    return (
+      <MUIDataTable
+        title={this.state.title}
+        data={this.state.data}
+        columns={this.state.columns}
+        options={this.state.options}
+      />
+    );
+  }
+}
+
+// class ConferencePersons extends React.Component {
+
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       data: []
+//     }
+//   }
+
+//   UNSAFE_componentWillReceiveProps() {
+//     this.groupBy("Person");
+//   }
+
+//   groupBy = (type) => {
+//     let sortedData = []
+//     if (type === "Person") {
+//       sortedData = _.sortBy(this.props.persons, p => p.score).reverse()
+//     } else if (type === "Person-Alphabetical") {
+//       sortedData = _.sortBy(this.props.persons, p => p.score).reverse()
+//     } else if (type === "Organization-Score") {
+//       sortedData = _.sortBy(this.props.persons, p => p.score).reverse()
+//     } else if (type === "Organization-Alphabetical") {
+//       sortedData = _.sortBy(this.props.persons, p => p.score).reverse()
+//     } else if (type === "Role") {
+//       sortedData = _.sortBy(this.props.persons, p => p.score).reverse()
+//     }
+//     this.setState({
+//       data: sortedData
+//     });
+//   }
+
+//   render() {
+//     return (
+//       <TableContainer style={{ marginRight: 50 }} component={Paper}>
+//         <Table size="small">
+//           <TableHead>
+//             <TableRow style={{ background: 'lightgrey' }}>
+//               <TableCell align="right">Person&nbsp;[Score]</TableCell>
+//               <TableCell align="right">Organization&nbsp;[Score]</TableCell>
+//               <TableCell align="right">Role&nbsp;</TableCell>
+//             </TableRow>
+//           </TableHead>
+//           <TableBody>
+//             {this.state.data.map(person => (
+//               <TableRow key={person.role + person.id}>
+//                 <TableCell align="right">
+//                   <Link to={'/person/' + person.id}>
+//                     {person.name}
+//                   </Link>
+//                   &nbsp;[{person.score}]
+//                 </TableCell>
+//                 <TableCell align="right">
+//                   <Link to={'/org/' + person.org_id}>
+//                     {person.org}
+//                   </Link>
+//                   &nbsp;[{person.org_score}]
+//                 </TableCell>
+//                 <TableCell align="right">{person.role}</TableCell>
+//               </TableRow>
+//             ))}
+//           </TableBody>
+//         </Table>
+//       </TableContainer>
+//     )
+//   }
+// }
