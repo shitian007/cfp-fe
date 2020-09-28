@@ -10,6 +10,7 @@
     "lodash.debounce": "^4.0.8",
     "material-ui": "^0.20.2",
     "material-ui-icons": "^1.0.0-beta.36",
+    "mui-datatables": "^2.14.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
