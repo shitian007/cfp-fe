@@ -160,32 +160,39 @@ class Person extends React.Component {
 class Visualizer extends React.Component {
   render() {
     let confDict = {}
+    let seenConfs = []
     this.props.conferences.forEach((conf) => {
-      if (confDict[conf.year] == undefined) {
+      if (seenConfs.includes(conf.title)) {
+        return;
+      }
+      if (confDict[conf.year] === undefined) {
         confDict[conf.year] = 1;
       } else {
         confDict[conf.year] = confDict[conf.year] + 1;
       }
+      seenConfs.push(conf.title)
     });
     let dataArr = []
     for (let [key, value] of Object.entries(confDict)) {
       dataArr.push({ x: key, y: value });
     }
-    console.log([...new Set(this.props.conferences.map(item => item.title))]);
 
     return (
-      <XYPlot
-        xType="ordinal"
-        width={600}
-        height={300}>
-        <VerticalGridLines />
-        <HorizontalGridLines />
-        <XAxis title="Year" />
-        <YAxis title="Service" />
-        <LineSeries
-          data={dataArr}
-          style={{ stroke: 'blue', strokeWidth: 3 }} />
-      </XYPlot>
+      <Box>
+        <Typography variant="h5">Service over time</Typography>
+        <XYPlot
+          xType="ordinal"
+          width={600}
+          height={300}>
+          <VerticalGridLines />
+          <HorizontalGridLines />
+          <XAxis title="Year" />
+          <YAxis title="Service" />
+          <LineSeries
+            data={dataArr}
+            style={{ stroke: 'blue', strokeWidth: 3 }} />
+        </XYPlot>
+      </Box>
     )
   }
 }
